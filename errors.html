@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>جدول کد های خطا</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container" dir="rtl">
+    <table class="table table-stripped table-hover">
+        <thead>
+        <th colspan="3" style="color:#707070;"><h3>جدول کد های خطا</h3></th>
+        <tr>
+            <th colspan="3" style="color:#707070;">لیست کد های خطا در سرویس API حسابفا در زیر ذکر شده اند.</th>
+        </tr>
+        </thead>
+        <tr>
+            <th>کد</th>
+            <th>خطا</th>
+            <th>شرح</th>
+        </tr>
+        <tr>
+            <th>100</th>
+            <td>InternalServerError</td>
+            <td>خطای داخلی در نرم افزار</td>
+        </tr>
+
+        <tr>
+            <th>101</th>
+            <td>TooManyRequests</td>
+            <td>تعداد در خواست ها در دقیقه از حد مجاز بیشتر شده است</td>
+        </tr>
+
+        <tr>
+            <th>103</th>
+            <td>MissingData</td>
+            <td>در درخواست ارسالی پارامتر Data وجود ندارد</td>
+        </tr>
+
+        <tr>
+            <th>104</th>
+            <td>MissingParameter</td>
+            <td>پارامتر ضروری ارسال نشده است. برای اطلاعات بیشتر به فیلد ErrorMessage نگاه کنید</td>
+        </tr>
+
+        <tr>
+            <th>105</th>
+            <td>ApiDisabled</td>
+            <td>API غیرفعال است</td>
+        </tr>
+
+        <tr>
+            <th>106</th>
+            <td>UserIsNotOwner</td>
+            <td>کاربر، صاحب کسب و کار نیست</td>
+        </tr>
+
+        <tr>
+            <th>107</th>
+            <td>BusinessNotFound</td>
+            <td>کسب و کار پیدا نشد</td>
+        </tr>
+
+        <tr>
+            <th>108</th>
+            <td>BusinessExpired</td>
+            <td>کسب و کار منقضی شده است</td>
+        </tr>
+
+        <tr>
+            <th>109</th>
+            <td>FinanYearNotFound</td>
+            <td>سال مالی پیدا نشد</td>
+        </tr>
+
+        <tr>
+            <th>110</th>
+            <td>IdMustBeZero</td>
+            <td>Id شی ارسالی باید صفر باشد</td>
+        </tr>
+
+        <tr>
+            <th>111</th>
+            <td>IdMustNotBeZero</td>
+            <td>Id شی ارسالی نباید صفر باشد</td>
+        </tr>
+
+        <tr>
+            <th>112</th>
+            <td>ObjectNotFound</td>
+            <td>شی درخواستی پیدا نشد. برای اطلاعات بیشتر به فیلد ErrorMessage نگاه کنید</td>
+        </tr>
+
+        <tr>
+            <th>113</th>
+            <td>MissingApiKey</td>
+            <td>ApiKey ارسال نشده است</td>
+        </tr>
+
+        <tr>
+            <th>114</th>
+            <td>ParameterIsOutOfRange</td>
+            <td>پارامتر خارج از رنج است. برای اطلاعات بیشتر به فیلد ErrorMessage نگاه کنید</td>
+        </tr>
+
+        <tr>
+            <th>190</th>
+            <td>ApplicationError</td>
+            <td>خطای حسابفا. برای اطلاعات بیشتر به فیلد ErrorMessage نگاه کنید</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
