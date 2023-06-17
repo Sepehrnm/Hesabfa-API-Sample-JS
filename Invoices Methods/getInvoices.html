@@ -126,6 +126,17 @@
         </li>
     </ul>
 </nav>
+<div class="row">
+    <div class="container">
+        <div class="col-12">
+            <div class="table table-responsive">
+                <table id="table">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script type='text/javascript'>
     function init() {
         $('button.dropbtn').on('click', (e) => {
@@ -140,6 +151,16 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    async function getInvoicesFunction() {
+        // queryInfo = {
+        //
+        // }
+        // let invoices = await getInvoices(queryInfo) {
+        //
+        // }
+    }
 </script>
 </body>
 </html>
