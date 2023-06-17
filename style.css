@@ -15,7 +15,7 @@ body {
 }
 
 #table {
-    direction: ltr;
+    direction: rtl;
 }
 
 td, th {
@@ -63,11 +63,12 @@ html {
     justify-content: center !important;
 }
 
-.button-container {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 1rem !important;
+#buttons-container {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0 1rem;
 }
 
 .save-invoice-form div {

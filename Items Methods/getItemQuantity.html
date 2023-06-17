@@ -2,9 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>دریافت موجودی کالا</title>
     <link rel="stylesheet" href="../style.css">
-
+    <script src="../API.js" type="text/javascript"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <link rel="icon" href="../Assets/hesabfaIcon.png">
 </head>
 <body>
 <nav>
@@ -118,6 +126,31 @@
         </li>
     </ul>
 </nav>
+<div class="row">
+    <div class="container">
+        <div class="col-12">
+            <div class="table table-responsive">
+                <table id="table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>بارکد</th>
+                        <th>کد</th>
+                        <th>کد کالا یا خدمات</th>
+                        <th>موجودی</th>
+                        <th>قیمت فروش</th>
+                        <th>Tag</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
+        </div>
+    </div>
+</div>
 <script type='text/javascript'>
     function init() {
         $('button.dropbtn').on('click', (e) => {
@@ -132,6 +165,56 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    async function getItemQuantityFunction() {
+        const items = await getItemQuantity();
+        const totalCount = items.length;
+        const buttonCount = Math.ceil(totalCount/16);
+        createButtons(buttonCount);
+        let i=1;
+        let rpp=16;
+        showData(i, rpp);
+    }
+
+    getItemQuantityFunction();
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        const items = await getItemQuantity();
+        tbody.innerHTML = ``;
+        let tr = ``;
+        for(let j=i ; j<rpp ; j++) {
+            tr = `
+            <tr>
+                <td>${i}</td>
+                <td>${items[j].Barcode}</td>
+                <td>${items[j].Code}</td>
+                <td>${items[j].ProductCode}</td>
+                <td>${items[j].Quantity}</td>
+                <td>${items[j].SellPrice}</td>
+                <td>${items[j].Tag}</td>
+            </tr>
+            `;
+            i++;
+
+            tbody.innerHTML += (tr);
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 16;
+        let rpp = i + 16;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>
