@@ -25,6 +25,7 @@ async function apiRequest(method, data) {
 async function getContact(data) {
     let method = 'contact/get';
     let result = await apiRequest(method, data);
+    return (result.Result);
     showData(result.Result);
 }
 
@@ -354,20 +355,20 @@ async function trialBalanceItems(data) {
 
 // Show Data
 
-function showData(output) {
-    let table = document.getElementById('table');
-    for (const [key, value] of Object.entries(output)) {
-        var tableItem = `
-            <tr>
-                <th>
-                    ${key}
-                </th>
-                <td>
-                    ${value}
-                </td>
-            </tr>
-        `;
-
-        table.innerHTML += (tableItem);
-    }
-}
+// function showData(output) {
+//     let table = document.getElementById('table');
+//     for (const [key, value] of Object.entries(output)) {
+//         var tableItem = `
+//             <tr>
+//                 <th>
+//                     ${key}
+//                 </th>
+//                 <td>
+//                     ${value}
+//                 </td>
+//             </tr>
+//         `;
+//
+//         table.innerHTML += (tableItem);
+//     }
+// }
