@@ -129,6 +129,10 @@
 <div class="row">
     <div class="container">
         <div class="col-12">
+            <h3>
+                دریافت لیست کالا یا خدمات
+            </h3>
+            <br>
             <div class="table table-responsive">
                 <table id="table" class="table table-hover table-striped">
                     <thead>
@@ -155,6 +159,9 @@
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -173,46 +180,86 @@
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
 </script>
+
+
 <script>
     async function getItemsFunction() {
         let queryInfo = {
             SortBy: 'Code',
             SortDesc: true,
-            Take: 20,
+            Take: 15,
             Skip: 0,
         }
 
         let items = await getItems(queryInfo);
 
-        const tbody = document.getElementById('tbody');
+        const totalCount = items.length;
+        const buttonCount = Math.ceil(totalCount/15);
+        createButtons(buttonCount);
+        let i=0;
+        let rpp=15;
+        showData(i, rpp);
+    }
 
-        items.map((item) => {
-            var tr = `
-            <tr>
-                <td>${item.Id}</td>
-                <td>${item.Code}</td>
-                <td>${item.Name}</td>
-                <td>${item.Active}</td>
-                <td>${item.Barcode}</td>
-                <td>${item.BuyPrice}</td>
-                <td>${item.Description}</td>
-                <td>${item.ItemType}</td>
-                <td>${item.NodeFamily}</td>
-                <td>${item.NodeId}</td>
-                <td>${item.NodeName}</td>
-                <td>${item.ProductCode}</td>
-                <td>${item.PurchasesTitle}</td>
-                <td>${item.SalesTitle}</td>
-                <td>${item.SellPrice}</td>
-                <td>${item.Stock}</td>
-                <td>${item.Unit}</td>
-            </tr>
-            `;
+    getItemsFunction();
+
+    async function showData(i, rpp) {
+    const tbody = document.getElementById('tbody');
+
+    let queryInfo = {
+        SortBy: 'Code',
+        SortDesc: true,
+        Take: rpp,
+        Skip: i,
+    }
+    const items = await getItems(queryInfo);
+    tbody.innerHTML = ``;
+    let tr = ``;
+    if(items) {
+        for (let j = i; j < rpp; j++) {
+            tr = `
+        <tr>
+            <td>${items[j].Id}</td>
+            <td>${items[j].Code}</td>
+            <td>${items[j].Name}</td>
+            <td>${items[j].Active}</td>
+            <td>${items[j].Barcode}</td>
+            <td>${items[j].BuyPrice}</td>
+            <td>${items[j].Description}</td>
+            <td>${items[j].ItemType}</td>
+            <td>${items[j].NodeFamily}</td>
+            <td>${items[j].NodeId}</td>
+            <td>${items[j].NodeName}</td>
+            <td>${items[j].ProductCode}</td>
+            <td>${items[j].PurchasesTitle}</td>
+            <td>${items[j].SalesTitle}</td>
+            <td>${items[j].SellPrice}</td>
+            <td>${items[j].Stock}</td>
+            <td>${items[j].Unit}</td>
+        </tr>
+        `;
+            i++;
 
             tbody.innerHTML += (tr);
-        })
+        }
     }
-    getItemsFunction();
+}
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+    let i = (--index) * 15;
+    let rpp = i + 15;
+    showData(i, rpp)
+    }
+
+
 </script>
 </body>
 </html>

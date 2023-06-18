@@ -129,11 +129,58 @@
 <div class="row">
     <div class="container">
         <div class="col-12">
+            <h3>
+                دریافت لیست فاکتورها
+            </h3>
+            <br>
+            <form action="#" class="save-contact-form">
+                <select class="form-select" name="type" id="type">
+                    <option selected>انتخاب کنید</option>
+                    <option value="0">فروش</option>
+                    <option value="1">خرید</option>
+                    <option value="2">برگشت از فروش</option>
+                    <option value="3">برگشت از خرید</option>
+                    <option value="4">ضایعات</option>
+                </select>
+                <br>
+                <button onclick="getInvoicesFunction()" class="btn btn-primary">دریافت</button>
+            </form>
             <div class="table table-responsive">
                 <table id="table">
-
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>ContactCode</th>
+                        <th>ContactTitle</th>
+                        <th>Currency</th>
+                        <th>CurrencyRate</th>
+                        <th>Date</th>
+                        <th>DueDate</th>
+                        <th>Freight</th>
+                        <th>InvoiceType</th>
+                        <th>Note</th>
+                        <th>Number</th>
+                        <th>Paid</th>
+                        <th>Payable</th>
+                        <th>Project</th>
+                        <th>Reference</th>
+                        <th>Rest</th>
+                        <th>Returned</th>
+                        <th>SalesmanCode</th>
+                        <th>SalesmanPercent</th>
+                        <th>Status</th>
+                        <th>WarehouseReceiptStatus</th>
+                        <th>Tag</th>
+                        <th>Sum</th>
+                        <th>Sent</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
                 </table>
             </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -154,12 +201,92 @@
 </script>
 <script>
     async function getInvoicesFunction() {
-        // queryInfo = {
-        //
-        // }
-        // let invoices = await getInvoices(queryInfo) {
-        //
-        // }
+        let type = document.getElementById('type').value;
+        let totalCount;
+
+        let queryInfo = {
+            SortBy: 'Date',
+                SortDesc: true,
+                Take: 10,
+                Skip: 0
+        }
+        let invoices = await getInvoices(queryInfo, type);
+        if(invoices) totalCount = invoices.TotalCount;
+
+        const buttonCount = Math.ceil(totalCount/10);
+        createButtons(buttonCount);
+        let i=0;
+        let rpp=10;
+        await showData(i, rpp);
+
+    }
+    getInvoicesFunction();
+
+    async function showData(i, rpp) {
+        let type = document.getElementById('type').value;
+        const tbody = document.getElementById('tbody');
+
+        let queryInfo = {
+            SortBy: 'Date',
+            SortDesc: true,
+            Take: 10,
+            Skip: i
+        }
+        let invoices = await getInvoices(queryInfo, type);
+
+        tbody.innerHTML = ``;
+        let tr = ``;
+        if(invoices) {
+            for (let j = 0; j < rpp; j++) {
+                if(invoices.List[j]) {
+                    tr = `
+                        <tr>
+                            <td>${invoices.List[j].Id}</td>
+                            <td>${invoices.List[j].ContactCode}</td>
+                            <td>${invoices.List[j].ContactTitle}</td>
+                            <td>${invoices.List[j].Currency}</td>
+                            <td>${invoices.List[j].CurrencyRate}</td>
+                            <td>${invoices.List[j].Date}</td>
+                            <td>${invoices.List[j].DueDate}</td>
+                            <td>${invoices.List[j].Freight}</td>
+                            <td>${invoices.List[j].InvoiceType}</td>
+                            <td>${invoices.List[j].Note}</td>
+                            <td>${invoices.List[j].Number}</td>
+                            <td>${invoices.List[j].Paid}</td>
+                            <td>${invoices.List[j].Payable}</td>
+                            <td>${invoices.List[j].Project}</td>
+                            <td>${invoices.List[j].Reference}</td>
+                            <td>${invoices.List[j].Rest}</td>
+                            <td>${invoices.List[j].Returned}</td>
+                            <td>${invoices.List[j].SalesmanCode}</td>
+                            <td>${invoices.List[j].SalesmanPercent}</td>
+                            <td>${invoices.List[j].Status}</td>
+                            <td>${invoices.List[j].WarehouseReceiptStatus}</td>
+                            <td>${invoices.List[j].Tag}</td>
+                            <td>${invoices.List[j].Sum}</td>
+                            <td>${invoices.List[j].Sent}</td>
+                        </tr>
+                    `;
+
+                    i++;
+                    tbody.innerHTML += (tr);
+                }
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
     }
 </script>
 </body>

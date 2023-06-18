@@ -126,6 +126,56 @@
         </li>
     </ul>
 </nav>
+<div class="row">
+    <div class="container">
+        <div class="col-12">
+            <h3>
+                دریافت لیست اشخاص
+            </h3>
+            <br>
+
+            <div class="table table-responsive">
+                <table id="table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Code</th>
+                        <th>Company</th>
+                        <th>Name</th>
+                        <th>LastName</th>
+                        <th>Mobile</th>
+                        <th>NationalCode</th>
+                        <th>EconomicCode</th>
+                        <th>Country</th>
+                        <th>Address</th>
+                        <th>State</th>
+                        <th>City</th>
+                        <th>ContactCredit</th>
+                        <th>Credits</th>
+                        <th>Active</th>
+                        <th>Liability</th>
+                        <th>IsVendor</th>
+                        <th>IsCustomer</th>
+                        <th>IsShareHolder</th>
+                        <th>Phone</th>
+                        <th>PostalCode</th>
+                        <th>RegistrationDate</th>
+                        <th>RegistrationNumber</th>
+                        <th>SharePercent</th>
+                        <th>Tag</th>
+                        <th>TaxType</th>
+                        <th>Website</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
+        </div>
+    </div>
+</div>
 <script type='text/javascript'>
     function init() {
         $('button.dropbtn').on('click', (e) => {
@@ -140,6 +190,91 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    async function getContactsFunction() {
+        let queryInfo = {
+            SortBy: 'Code',
+            SortDesc: true,
+            Take: 5,
+            Skip: 0,
+        }
+        let contacts = await getContacts(queryInfo);
+
+        const totalCount = contacts.List.length;
+        const buttonCount = Math.ceil(totalCount/10);
+        createButtons(buttonCount);
+        let i=0;
+        let rpp=10;
+        showData(i, rpp);
+    }
+
+    getContactsFunction();
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        let queryInfo = {
+            SortBy: 'Code',
+            SortDesc: true,
+            Take: 10,
+            Skip: 0,
+        }
+        let contacts = await getContacts(queryInfo);
+        tbody.innerHTML = ``;
+        let tr = ``;
+        if (contacts) {
+            for (let j = i; j < rpp; j++) {
+                tr = `
+                <tr>
+                    <td>${contacts.List[j].Id}</td>
+                    <td>${contacts.List[j].Code}</td>
+                    <td>${contacts.List[j].Company}</td>
+                    <td>${contacts.List[j].Name}</td>
+                    <td>${contacts.List[j].LastName}</td>
+                    <td>${contacts.List[j].Mobile}</td>
+                    <td>${contacts.List[j].NationalCode}</td>
+                    <td>${contacts.List[j].EconomicCode}</td>
+                    <td>${contacts.List[j].Country}</td>
+                    <td>${contacts.List[j].Address}</td>
+                    <td>${contacts.List[j].State}</td>
+                    <td>${contacts.List[j].City}</td>
+                    <td>${contacts.List[j].ContactCredit}</td>
+                    <td>${contacts.List[j].Credits}</td>
+                    <td>${contacts.List[j].Active}</td>
+                    <td>${contacts.List[j].Liability}</td>
+                    <td>${contacts.List[j].IsVendor}</td>
+                    <td>${contacts.List[j].IsCustomer}</td>
+                    <td>${contacts.List[j].IsShareHolder}</td>
+                    <td>${contacts.List[j].Phone}</td>
+                    <td>${contacts.List[j].PostalCode}</td>
+                    <td>${contacts.List[j].RegistrationDate}</td>
+                    <td>${contacts.List[j].RegistrationNumber}</td>
+                    <td>${contacts.List[j].SharePercent}</td>
+                    <td>${contacts.List[j].Tag}</td>
+                    <td>${contacts.List[j].TaxType}</td>
+                    <td>${contacts.List[j].Website}</td>
+                </tr>
+                `;
+                i++;
+
+                tbody.innerHTML += (tr);
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

@@ -123,8 +123,12 @@ async function getInvoiceById(data) {
     return (result.Result);
 }
 
-async function getInvoices(data) {
+async function getInvoices(queryInfo, type) {
     let method = 'invoice/getinvoices';
+    let data = {
+        'queryInfo': queryInfo,
+        'type': type
+    }
     let result = await apiRequest(method, data);
     return (result.Result);
 }

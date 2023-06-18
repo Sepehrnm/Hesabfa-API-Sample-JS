@@ -129,11 +129,14 @@
 <div class="row">
     <div class="container">
         <div class="col-12">
+            <h3>
+                دریافت موجودی کالا و خدمات
+            </h3>
+            <br>
             <div class="table table-responsive">
                 <table id="table" class="table table-hover table-striped">
                     <thead>
                     <tr>
-                        <th>ردیف</th>
                         <th>بارکد</th>
                         <th>کد</th>
                         <th>کد کالا یا خدمات</th>
@@ -170,10 +173,10 @@
     async function getItemQuantityFunction() {
         const items = await getItemQuantity();
         const totalCount = items.length;
-        const buttonCount = Math.ceil(totalCount/16);
+        const buttonCount = Math.ceil(totalCount/15);
         createButtons(buttonCount);
-        let i=1;
-        let rpp=16;
+        let i=0;
+        let rpp=15;
         showData(i, rpp);
     }
 
@@ -184,10 +187,9 @@
         const items = await getItemQuantity();
         tbody.innerHTML = ``;
         let tr = ``;
-        for(let j=i ; j<rpp ; j++) {
+        for(let j = i ; j<rpp ; j++) {
             tr = `
             <tr>
-                <td>${i}</td>
                 <td>${items[j].Barcode}</td>
                 <td>${items[j].Code}</td>
                 <td>${items[j].ProductCode}</td>
@@ -211,8 +213,8 @@
     }
 
     function pageHandler(index) {
-        let i = (--index) * 16;
-        let rpp = i + 16;
+        let i = (--index) * 15;
+        let rpp = i + 15;
         showData(i, rpp)
     }
 </script>
