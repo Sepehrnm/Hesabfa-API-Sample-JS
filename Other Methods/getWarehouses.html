@@ -131,6 +131,16 @@
         <div class="col-12">
             <h3>دریافت لیست انبارها</h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>کد انبار</th>
+                        <th>نام انبار</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -148,6 +158,25 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    async function getWarehousesFunction() {
+        const tbody = document.getElementById('tbody');
+        let warehouses = await getWarehouses();
+        warehouses.map(warehouse => {
+            let tr = `
+                <tr>
+                    <td>${warehouse.Id}</td>
+                    <td>${warehouse.Code}</td>
+                    <td>${warehouse.Name}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        })
+    }
+
+    getWarehousesFunction();
 </script>
 </body>
 </html>

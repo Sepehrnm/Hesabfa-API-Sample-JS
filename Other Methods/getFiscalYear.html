@@ -133,6 +133,16 @@
                 دریافت اطلاعات سال مالی جاری
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>نام سال مالی</th>
+                        <th>تاریخ شروع سال مالی</th>
+                        <th>تاریخ پایان سال مالی</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +160,22 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    async function getFiscalYearFunction() {
+        const tbody = document.getElementById('tbody');
+        let fiscalYear = await getFiscalYear();
+        let tr = `
+                <tr>
+                    <td>${fiscalYear.Name}</td>
+                    <td>${fiscalYear.StartDate}</td>
+                    <td>${fiscalYear.EndDate}</td>
+                </tr>
+            `;
+            tbody.innerHTML = tr;
+    }
+    getFiscalYearFunction();
 </script>
 </body>
 </html>

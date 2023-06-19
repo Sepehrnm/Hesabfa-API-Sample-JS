@@ -132,23 +132,48 @@
             <h3>
                 دریافت لیست دسته بندی کالاها
             </h3>
+            <div id="category-container"></div>
         </div>
     </div>
 </div>
 <script type='text/javascript'>
     function init() {
-        $('button.dropbtn').on('click', (e) => {
-            $(".dropdown-content").slideUp();
-            $(e.target).next().stop().slideToggle();
+        ('button.dropbtn').on('click', (e) => {
+            (".dropdown-content").slideUp();
+            (e.target).next().stop().slideToggle();
         });
     }
 
-    $( document ).ready(() => {
+    ( document ).ready(() => {
         init();
     });
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
-    $('a[href="../' + path + '"]').parent().slideDown();
+    ('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    // var html = ``;
+    // var result;
+    //
+    // async function getProductCategoriesFunction() {
+    //     let categories = await getProductCategories();
+    //     result = showCategory(categories.Root);
+    //     console.log(result);
+    //
+    //     if(result.length > 0) {
+    //         showCategory(result);
+    //     }
+    // }
+    //
+    // function showCategory(item) {
+    //     let categoryContainer = document.getElementById('category-container');
+    //     categoryContainer.innerHTML += (html);
+    //
+    //     return item.Children;
+    // }
+    // getProductCategoriesFunction();
+
 </script>
 </body>
 </html>

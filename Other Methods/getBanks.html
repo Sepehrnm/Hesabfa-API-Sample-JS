@@ -127,12 +127,25 @@
     </ul>
 </nav>
 <div class="row">
-    <div class="cotainer">
+    <div class="container">
         <div class="col-12">
             <h3>
                 دریافت لیست بانک ها
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>کد بانک</th>
+                        <th>شماره حساب</th>
+                        <th>نام بانک</th>
+                        <th>شعبه</th>
+                        <th>واحد پول</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +163,27 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    async function getBanksFunction() {
+        const tbody = document.getElementById('tbody');
+        let banks = await getBanks();
+        let tr = ``;
+        banks.map(bank => {
+            tr = `
+                <tr>
+                    <td>${bank.Id}</td>
+                    <td>${bank.Code}</td>
+                    <td>${bank.AccountNumber}</td>
+                    <td>${bank.Name}</td>
+                    <td>${bank.Branch}</td>
+                    <td>${bank.Currency}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        })
+    }
+    getBanksFunction();
 </script>
 </body>
 </html>

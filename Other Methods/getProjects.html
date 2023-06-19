@@ -133,6 +133,19 @@
                 دریافت لیست پروژه ها
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <th>Id</th>
+                    <th>نام پروژه</th>
+                    <th>فعال بودن پروژه</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +163,52 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+
+<script>
+    async function getProjectsFunction() {
+        let projects = await getProjects();
+
+        const totalCount = projects.length;
+        const buttonCount = Math.ceil(totalCount / 10);
+        createButtons(buttonCount);
+        let i = 0;
+        let rpp = 10;
+        showData(i, rpp);
+    }
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        let projects = await getProjects();
+        tbody.innerHTML = ``;
+
+        let tr = ``;
+        for (let j = i; j < rpp; j++) {
+            tr = `
+                <tr>
+                    <td>${projects[j].Id}</td>
+                    <td>${projects[j].Title}</td>
+                    <td>${projects[j].Active}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        }
+    }
+    getProjectsFunction();
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

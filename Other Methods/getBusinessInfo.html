@@ -133,6 +133,22 @@
                 دریافت اطلاعات کسب و کار
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>نام کسب و کار</th>
+                        <th>نام قانونی</th>
+                        <th>تقویم</th>
+                        <th>واحد پول اصلی</th>
+                        <th>امکان استفاده از سیستم چند ارزی</th>
+                        <th>سایر ارزها</th>
+                        <th>طرح</th>
+                        <th>اعتبار سند</th>
+                        <th>تاریخ انقضا</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +166,28 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    async function getBusinessInfoFunction() {
+        const tbody = document.getElementById('tbody');
+        let businessInfo = await getBusinessInfo();
+        let tr = `
+                <tr>
+                    <td>${businessInfo.Name}</td>
+                    <td>${businessInfo.LegalName}</td>
+                    <td>${businessInfo.Calendar}</td>
+                    <td>${businessInfo.Currency}</td>
+                    <td>${businessInfo.SupportMultiCurrency}</td>
+                    <td>${businessInfo.OtherCurrencies}</td>
+                    <td>${businessInfo.Subscription}</td>
+                    <td>${businessInfo.Credit}</td>
+                    <td>${businessInfo.ExpireDate}</td>
+                </tr>
+            `;
+            tbody.innerHTML = tr;
+    }
+    getBusinessInfoFunction();
 </script>
 </body>
 </html>

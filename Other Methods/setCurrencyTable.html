@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <link rel="icon" href="../Assets/hesabfaIcon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
 <nav>
@@ -131,6 +132,22 @@
         <div class="col-12">
             <h3>تنظیم جدول نرخ برابری ارزها</h3>
             <br>
+            <form class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="from">از</label>
+                    <input class="form-control" type="text" name="from" id="from" />
+                </div>
+                <div class="align">
+                    <label class="form-label" for="to">به</label>
+                    <input class="form-control" type="text" name="to" id="to" />
+                </div>
+                <div class="align">
+                    <label class="form-label" for="rate">ضریب تبدیل</label>
+                    <input class="form-control" type="text" name="rate" id="rate" />
+                </div>
+                <br>
+                <button id="button" class="btn btn-primary" onclick="setCurrencyTableFunction()">ذخیره</button>
+            </form>
         </div>
     </div>
 </div>
@@ -148,6 +165,24 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('#button').on('click', (e) => {
+        e.preventDefault();
+    });
+
+    async function setCurrencyTableFunction() {
+        const from = document.getElementById('from').value;
+        const to = document.getElementById('to').value;
+        const rate = document.getElementById('rate').value;
+        const data = {
+            'from': from,
+            'to': to,
+            'rate': rate
+        }
+        let response = await setCurrencyTable(data);
+        console.log(response)
+    }
 </script>
 </body>
 </html>

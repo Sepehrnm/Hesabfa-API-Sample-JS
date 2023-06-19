@@ -133,6 +133,17 @@
                 دریافت لیست صندوق ها
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <th>ID</th>
+                    <th>کد صندوق</th>
+                    <th>نام صندوق</th>
+                    <th>واحد پول</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +161,26 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    async function getCashesFunction() {
+        const tbody = document.getElementById('tbody');
+        let cashes = await getCashes();
+        let tr = ``;
+        cashes.map(cash => {
+            tr = `
+                <tr>
+                    <td>${cash.Id}</td>
+                    <td>${cash.Code}</td>
+                    <td>${cash.Name}</td>
+                    <td>${cash.Currency}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        })
+    }
+    getCashesFunction();
 </script>
 </body>
 </html>

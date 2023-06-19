@@ -133,6 +133,16 @@
                 دریافت جدول نرخ برابری ارزها
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>از</th>
+                        <th>به</th>
+                        <th>ضریب تبدیل</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +160,26 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    async function getCurrencyTableFunction() {
+        let currencyTable = await getCurrencyTable();
+        console.log(currencyTable)
+        let tbody = document.getElementById('tbody');
+        let tr = '';
+        currencyTable.map(item => {
+            tr = `
+                <tr>
+                    <td>${item.From}</td>
+                    <td>${item.To}</td>
+                    <td>${item.Rate}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        })
+    }
+
+    getCurrencyTableFunction();
 </script>
 </body>
 </html>

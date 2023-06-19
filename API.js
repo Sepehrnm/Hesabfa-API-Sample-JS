@@ -223,44 +223,51 @@ async function getChanges(data) {
     return (result.Result);
 }
 
-async function getFiscalYears(data) {
+async function getFiscalYears() {
     let method = 'setting/GetFiscalYears';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getBanks(data) {
+async function getBanks() {
     let method = 'setting/GetBanks';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getCashes(data) {
+async function getCashes() {
     let method = 'setting/GetCashes';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getPettyCashes(data) {
+async function getPettyCashes() {
     let method = 'setting/GetPettyCashes';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getCurrency(data) {
+async function getCurrency() {
     let method = 'setting/GetCurrency';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getWarehouses(data) {
+async function getWarehouses() {
     let method = 'setting/GetWarehouses';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getProductCategories(data) {
+async function getProductCategories() {
     let method = 'setting/GetProductCategories';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
@@ -277,26 +284,30 @@ async function getContactCategories(data) {
     return (result.Result);
 }
 
-async function getFiscalYear(data) {
+async function getFiscalYear() {
     let method = 'setting/GetFiscalYear';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getProjects(data) {
+async function getProjects() {
     let method = 'setting/GetProjects';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getSalesmen(data) {
+async function getSalesmen() {
     let method = 'setting/GetSalesmen';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getCurrencyTable(data) {
+async function getCurrencyTable() {
     let method = 'setting/GetCurrencyTable';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
@@ -307,14 +318,16 @@ async function setCurrencyTable(data) {
     return (result.Result);
 }
 
-async function getAccounts(data) {
+async function getAccounts() {
     let method = 'setting/GetAccounts';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }
 
-async function getBusinessInfo(data) {
+async function getBusinessInfo() {
     let method = 'setting/GetBusinessInfo';
+    let data = '';
     let result = await apiRequest(method, data);
     return (result.Result);
 }

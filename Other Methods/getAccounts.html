@@ -133,6 +133,19 @@
                 دریافت جدول حساب ها
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>نام حساب</th>
+                        <th>مسیر حساب</th>
+                        <th><a href="https://hesabfa.com/help/api/TypesTable#detail-type">نوع تفصیل</a></th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +163,53 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    async function getAccountsFunction() {
+        let accounts = await getAccounts();
+        const totalCount = accounts.length;
+        const buttonCount = Math.ceil(totalCount / 10);
+        createButtons(buttonCount);
+        let i = 0;
+        let rpp = 10;
+        showData(i, rpp);
+    }
+
+    getAccountsFunction();
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        let accounts = await getAccounts();
+        tbody.innerHTML = ``;
+
+        let tr = ``;
+        for (let j = i; j < rpp; j++) {
+            tr = `
+                <tr>
+                    <td>${accounts[j].Name}</td>
+                    <td>${accounts[j].FullPath}</td>
+                    <td>${accounts[j].DetailType}</td>
+                </tr>
+            `;
+            tbody.innerHTML += tr;
+        }
+    }
+
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>
