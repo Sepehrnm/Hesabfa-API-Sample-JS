@@ -132,7 +132,7 @@
         <div class="col-12">
             <h3>تنظیم جدول نرخ برابری ارزها</h3>
             <br>
-            <form class="save-contact-form">
+            <form method="post" class="save-contact-form">
                 <div class="align">
                     <label class="form-label" for="from">از</label>
                     <input class="form-control" type="text" name="from" id="from" />
@@ -176,12 +176,18 @@
         const to = document.getElementById('to').value;
         const rate = document.getElementById('rate').value;
         const data = {
-            'from': from,
-            'to': to,
-            'rate': rate
+            'Table': [{
+                'from': from,
+                'to': to,
+                'rate': rate
+            }]
         }
         let response = await setCurrencyTable(data);
-        console.log(response)
+        if(response.Success) {
+            alert('ذخیره گردید');
+        } else {
+            alert('خطا در عملیات');
+        }
     }
 </script>
 </body>

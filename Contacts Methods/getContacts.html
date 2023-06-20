@@ -192,6 +192,7 @@
     $('a[href="../' + path + '"]').parent().slideDown();
 </script>
 <script>
+    $('button').on('click', (e) => e.preventDefault())
     async function getContactsFunction() {
         let queryInfo = {
             SortBy: 'Code',

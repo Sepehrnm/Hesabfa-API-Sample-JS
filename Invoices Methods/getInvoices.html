@@ -133,7 +133,7 @@
                 دریافت لیست فاکتورها
             </h3>
             <br>
-            <form action="#" class="save-contact-form">
+            <form method="post" class="save-contact-form">
                 <select class="form-select" name="type" id="type">
                     <option selected>انتخاب کنید</option>
                     <option value="0">فروش</option>
@@ -200,6 +200,7 @@
     $('a[href="../' + path + '"]').parent().slideDown();
 </script>
 <script>
+    $('button').on('click', (e) => e.preventDefault())
     async function getInvoicesFunction() {
         let type = document.getElementById('type').value;
         let totalCount;

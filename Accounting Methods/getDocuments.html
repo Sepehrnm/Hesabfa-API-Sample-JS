@@ -133,6 +133,27 @@
                 دریافت لیست سند حسابداری
             </h3>
             <br>
+            <div class="table table-responsive">
+                <table class="table table-responsive table-striped">
+                    <thead id="thead">
+                        <tr>
+                            <th>شماره سند</th>
+                            <th>ارجاع</th>
+                            <th>تاریخ</th>
+                            <th>توضیحات</th>
+                            <th>پروژه</th>
+                            <th>بدهکار</th>
+                            <th>بستانکار</th>
+                            <th><a href="https://hesabfa.com/help/api/TypesTable#doc-status">وضعیت سند</a></th>
+                            <th>تراکنش ها</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +171,67 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function getDocumentFunction(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        const data = {
+            'queryInfo': {
+                SortBy: 'Date',
+                SortDesc: true,
+                Take: 20,
+                Skip: 0
+            }
+        }
+
+        let documentItem = await getDocuments(data);
+
+        if(!documentItem.Success) {
+            alert(`Error: ${documentItem.ErrorCode}  ErrorMessage: ${documentItem.ErrorMessage}`);
+        } else {
+            let list = documentItem.Result.List;
+            let totalCount = documentItem.Result.TotalCount;
+            let buttonCount = (totalCount/10);
+            createButtons(buttonCount);
+
+            let tr = ``;
+            for(let j = i ; j < rpp ; j++) {
+                tr = `
+                    <tr>
+                        <td>${list[j].Number}</td>
+                        <td>${list[j].Reference}</td>
+                        <td>${list[j].Date}</td>
+                        <td>${list[j].Description}</td>
+                        <td>${list[j].Project}</td>
+                        <td>${list[j].Debit}</td>
+                        <td>${list[j].Credit}</td>
+                        <td>${list[j].Status}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += tr;
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        getDocumentFunction(i, rpp)
+    }
+
+    getDocumentFunction(0, 10);
 </script>
 </body>
 </html>

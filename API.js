@@ -55,7 +55,7 @@ async function deleteContact(data) {
 async function getContactLink(data) {
     let method = 'contact/getContactLink';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 //Items Methods
@@ -154,7 +154,7 @@ async function savePayment(data) {
 async function getOnlineInvoiceURL(data) {
     let method = 'invoice/getonlineinvoiceurl';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function SaveWarehouseReceipt(data) {
@@ -194,7 +194,7 @@ async function deleteReceipt(data) {
 async function getDocument(data) {
     let method = 'document/get';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function saveDocument(data) {
@@ -206,7 +206,7 @@ async function saveDocument(data) {
 async function getDocuments(data) {
     let method = 'document/getdocuments';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function deleteDocument(data) {
@@ -315,7 +315,7 @@ async function getCurrencyTable() {
 async function setCurrencyTable(data) {
     let method = 'setting/SetCurrencyTable';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getAccounts() {

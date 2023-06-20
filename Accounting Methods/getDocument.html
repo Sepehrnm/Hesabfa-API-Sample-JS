@@ -133,6 +133,20 @@
                 دریافت سند حسابداری
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="number">شماره سند حسابداری</label>
+                    <input class="form-control" type="text" name="number" id="number">
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="getDocumentFunction()">دریافت</button>
+            </form>
+            <div class="table table-responsive">
+                <table class="table table-responsive table-striped">
+                    <thead id="thead"></thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +164,103 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function getDocumentFunction() {
+        const thead = document.getElementById('thead');
+        const tbody = document.getElementById('tbody');
+        thead.innerHTML = ``;
+        tbody.innerHTML = ``;
+
+        const number = document.getElementById('number').value;
+        const data = {
+            'number': number
+        }
+
+        let documentItem = await getDocument(data);
+        let tr = ``;
+        let td = ``;
+        if(!documentItem.Success) {
+            alert(`Error: ${documentItem.ErrorCode}  ErrorMessage: ${documentItem.ErrorMessage}`);
+        } else {
+            tr = `
+                <tr>
+                    <th>شماره سند</th>
+                    <th>ارجاع</th>
+                    <th>تاریخ</th>
+                    <th>توضیحات</th>
+                    <th>پروژه</th>
+                    <th>بدهکار</th>
+                    <th>بستانکار</th>
+                    <th><a href="https://hesabfa.com/help/api/TypesTable#doc-status">وضعیت سند</a></th>
+                    <th>تراکنش ها</th>
+                </tr>
+            `;
+            thead.innerHTML = tr;
+            tr = ``;
+
+            tr = `
+                <tr>
+                    <td>${documentItem.Result.Number}</td>
+                    <td>${documentItem.Result.Reference}</td>
+                    <td>${documentItem.Result.Date}</td>
+                    <td>${documentItem.Result.Description}</td>
+                    <td>${documentItem.Result.Project}</td>
+                    <td>${documentItem.Result.Debit}</td>
+                    <td>${documentItem.Result.Credit}</td>
+                    <td>${documentItem.Result.Status}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" id="modalButton" data-target="#exampleModal">نمایش تراکنش ها</button>
+                        <div class="modal fade modal-xl" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">تراکنش ها</h5>
+                                        <button class="btn btn-danger" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&#10006;</span>
+                                        </button>
+                                    </div>
+                                    <div id="modal-body" class="modal-body">
+            `;
+
+            documentItem.Result.Transactions.map(transaction => {
+                td = `
+                    <div>
+                        <div style="direction: ltr !important;">${transaction.Id} :ID</div>
+                        <div> حساب: ${transaction.AccountPath}</div>
+                        <div> مبلغ: ${transaction.Amount}</div>
+                        <div> کد بانک: ${transaction.BankCode}</div>
+                        <div> کد صندوق: ${transaction.CashCode}</div>
+                        <div> کد شخص: ${transaction.ContactCode}</div>
+                        <div> واحد پول: ${transaction.Currency}</div>
+                        <div> مبلغ در صورت چند ارزی بودن: ${transaction.CurrencyAmount}</div>
+                        <div> توضیحات: ${transaction.Description}</div>
+                        <div> اطلاعات اضافه: ${transaction.Info}</div>
+                        <div> کد تنخواه گردان: ${transaction.PettyCashCode}</div>
+                        <div> کد کالا: ${transaction.ProductCode}</div>
+                        <div> نوع تراکنش: ${transaction.Type}</div>
+                        <hr>
+                </div>
+
+                `;
+                tr += td;
+            });
+
+
+            tr += `
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </tr>
+
+            `;
+
+            tbody.innerHTML += tr;
+        }
+    }
 </script>
 </body>
 </html>

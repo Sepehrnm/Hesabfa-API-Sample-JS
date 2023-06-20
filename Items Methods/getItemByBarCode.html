@@ -133,6 +133,20 @@
                 دریافت کالا یا خدمات از طریق بارکد
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="barcode">بارکد کالا یا خدمات</label>
+                    <input class="form-control" type="text" name="barcode" id="barcode">
+                </div>
+                <button class="btn btn-primary" type="submit" onclick="getItemByBarCodeFunction()">دریافت</button>
+            </form>
+            <br><br>
+            <div class="table table-responsive">
+                <table id="table" class="table table-responsive table-striped table-hover">
+                    <tr id="tableRowTh"></tr>
+                    <tr id="tableRowTd"></tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +164,29 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    $('button').on('click', (e) => e.preventDefault())
+    async function getItemByBarCodeFunction() {
+        const barcode = document.getElementById('barcode').value;
+        const data = {
+            'barcode': barcode
+        }
+        let item = await getItemByBarcode(data);
+
+        const tableRowTd = document.getElementById('tableRowTd');
+        const tableRowTh = document.getElementById('tableRowTh');
+
+        for (const [key, value] of Object.entries(item)) {
+            var th = `
+                    <td>${key}</td>`;
+            tableRowTh.innerHTML += (th);
+
+            var td = `
+                    <td>${value}</td>`;
+            tableRowTd.innerHTML += (td);
+        }
+    }
 </script>
 </body>
 </html>

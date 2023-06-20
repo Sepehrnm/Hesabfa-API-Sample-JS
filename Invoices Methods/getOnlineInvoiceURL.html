@@ -133,6 +133,23 @@
                 دریافت URL فاکتور آنلاین
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label for="number">شماره رسید مدنظر</label>
+                    <input type="text" id="number" name="number" />
+                </div>
+                <select class="form-select" name="type" id="type">
+                    <option selected>انتخاب کنید</option>
+                    <option value="0">فروش</option>
+                    <option value="1">خرید</option>
+                    <option value="2">برگشت از فروش</option>
+                    <option value="3">برگشت از خرید</option>
+                    <option value="4">ضایعات</option>
+                </select>
+                <br>
+                <button onclick="getOnlineInvoiceURLFunction()" class="btn btn-primary">دریافت</button>
+            </form>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +167,23 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    $('button').on('click', (e) => e.preventDefault())
+    async function getOnlineInvoiceURLFunction() {
+        const number = document.getElementById('number').value;
+        const type = document.getElementById('type').value;
+
+        let data = {
+            'number': number,
+            'type': type
+        }
+
+        let url = await getOnlineInvoiceURL(data);
+        if(!url.Success) {
+            alert(url.ErrorMessage)
+        }
+    }
 </script>
 </body>
 </html>

@@ -133,6 +133,29 @@
                 دریافت لینک کارت حساب شخص
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="code">کد شخص مورد نظر</label>
+                    <input class="form-control" type="text" name="code" id="code">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="showAllAccounts">نمایش سایر حسابها(پیشفرض false)</label>
+                    <input class="form-control" type="text" name="showAllAccounts" id="showAllAccounts">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="days">تعداد روز اعتبار (پیشفرض 30 روز)</label>
+                    <input class="form-control" type="text" name="days" id="days">
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="getContactLinkFunction()">دریافت</button>
+            </form>
+            <br><br>
+            <div class="table table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead id="thead"></thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +173,46 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    $('button').on('click', (e) => e.preventDefault())
+    async function getContactLinkFunction() {
+        const code = document.getElementById('code').value;
+        const showAllAccounts = document.getElementById('showAllAccounts').value;
+        const days = document.getElementById('days').value;
+        const thead = document.getElementById('thead');
+        const tbody = document.getElementById('tbody');
+        thead.innerHTML = ``;
+        tbody.innerHTML = ``;
+
+        const data = {
+            'code': code,
+            'showAllAccounts': showAllAccounts ? showAllAccounts : false,
+            'days': days ? days : 30
+        }
+
+        let link = await getContactLink(data);
+        let tr = ``;
+
+        if(!link.Success) {
+            alert("Code: " + link.ErrorCode + "\n" + "Message: " + link.ErrorMessage)
+        } else {
+            tr = `
+                <tr>
+                    <th style="text-align: center;">لینک کارت حساب شخص</th>
+                </tr>
+            `;
+            thead.innerHTML = tr;
+
+            tr = `
+                <tr>
+                    <td style="text-align: center;">${link.Result.Link}</td>
+                </tr>
+            `;
+            tbody.innerHTML = tr;
+        }
+    }
 </script>
 </body>
 </html>

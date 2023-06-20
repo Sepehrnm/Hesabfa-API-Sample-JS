@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>دریافت شخص با ID</title>
+    <title>دریافت شخص از طریق ID</title>
     <link rel="stylesheet" href="../style.css">
     <script src="../API.js" type="text/javascript"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -133,6 +133,51 @@
                 دریافت شخص از طریق ID
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label for="id">ID شخص</label>
+                    <input type="text" id="id" name="id" placeholder="...,1,2" />
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="getContactByIdFunction()">دریافت</button>
+            </form>
+            <br><br>
+            <div class="table table-responsive">
+                <table style="direction: rtl;" id="table" class="table table-responsive table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Code</td>
+                            <td>Company</td>
+                            <td>Name</td>
+                            <td>LastName</td>
+                            <td>Mobile</td>
+                            <td>NationalCode</td>
+                            <td>EconomicCode</td>
+                            <td>Country</td>
+                            <td>Address</td>
+                            <td>State</td>
+                            <td>City</td>
+                            <td>ContactCredit</td>
+                            <td>Credits</td>
+                            <td>Active</td>
+                            <td>Liability</td>
+                            <td>IsVendor</td>
+                            <td>IsCustomer</td>
+                            <td>IsShareHolder</td>
+                            <td>Phone</td>
+                            <td>PostalCode</td>
+                            <td>RegistrationDate</td>
+                            <td>RegistrationNumber</td>
+                            <td>SharePercent</td>
+                            <td>Tag</td>
+                            <td>TaxType</td>
+                            <td>Website</td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -150,6 +195,61 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function getContactByIdFunction() {
+        let tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        let id = document.getElementById('id').value;
+        let idList = [];
+
+        idList.push(id.split(','));
+
+        const data = {
+            'idList': idList[0]
+        }
+
+        let contacts = await getContactById(data);
+        console.log(contacts)
+        let tr = ``;
+
+        contacts.map(contact => {
+            tr = `
+            <tr>
+                <td>${contact.Id}</td>
+                <td>${contact.Code}</td>
+                <td>${contact.Company}</td>
+                <td>${contact.Name}</td>
+                <td>${contact.LastName}</td>
+                <td>${contact.Mobile}</td>
+                <td>${contact.NationalCode}</td>
+                <td>${contact.EconomicCode}</td>
+                <td>${contact.Country}</td>
+                <td>${contact.Address}</td>
+                <td>${contact.State}</td>
+                <td>${contact.City}</td>
+                <td>${contact.ContactCredit}</td>
+                <td>${contact.Credits}</td>
+                <td>${contact.Active}</td>
+                <td>${contact.Liability}</td>
+                <td>${contact.IsVendor}</td>
+                <td>${contact.IsCustomer}</td>
+                <td>${contact.IsShareHolder}</td>
+                <td>${contact.Phone}</td>
+                <td>${contact.PostalCode}</td>
+                <td>${contact.RegistrationDate}</td>
+                <td>${contact.RegistrationNumber}</td>
+                <td>${contact.SharePercent}</td>
+                <td>${contact.Tag}</td>
+                <td>${contact.TaxType}</td>
+                <td>${contact.Website}</td>
+
+           `;
+            tbody.innerHTML += (tr);
+        })
+    }
 </script>
 </body>
 </html>
