@@ -131,6 +131,40 @@
         <div class="col-12">
             <h3>دریافت لیست رسیدها</h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="type">نوع رسید</label>
+                    <select class="form-select" type="text" id="type">
+                        <option value="1">دریافت</option>
+                        <option value="2">پرداخت</option>
+                    </select>
+                </div>
+                <br><br>
+                <button class="btn btn-primary" onclick="getReceiptsFunction()">دریافت</button>
+            </form>
+            <br>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>شماره رسید</th>
+                        <th>تاریخ رسید</th>
+                        <th>شرح</th>
+                        <th>مبلغ رسید</th>
+                        <th>واحد پول رسید</th>
+                        <th>پروژه</th>
+                        <th>کد شخص</th>
+                        <th>نام شخص</th>
+                        <th>مبلغ</th>
+                        <th>توضیحات</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -148,6 +182,91 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function getReceiptsFunction() {
+        const type = document.getElementById('type').value;
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        const data = {
+            'type': type,
+            queryInfo:{
+                SortBy: 'DateTime',
+                SortDesc: true,
+                Take: 10,
+                Skip: 0
+            }
+        }
+        const receipts = await getReceipts(data);
+        if(receipts.Success) {
+            const totalCount = receipts.Result.TotalCount;
+            const buttonCount = Math.ceil(totalCount/10);
+            createButtons(buttonCount);
+            let i = 0;
+            let rpp = 10;
+            showData(i, rpp);
+        } else {
+            alert(`ErrorCode: ${receipts.ErrorCode}  ErrorMessage: ${receipts.ErrorMessage}`)
+        }
+    }
+
+    async function showData(i, rpp) {
+        const type = document.getElementById('type').value;
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        const data = {
+            'type': type,
+            queryInfo:{
+                SortBy: 'DateTime',
+                SortDesc: true,
+                Take: rpp,
+                Skip: 0
+            }
+        }
+        const receipts = await getReceipts(data);
+        let tr = ``;
+
+        for(let j = i ; j < rpp ; j++) {
+            if (receipts.Result.List[j]) {
+                tr = `
+                <tr>
+                    <td>${receipts.Result.List[j].Number}</td>
+                    <td>${receipts.Result.List[j].DateTime}</td>
+                    <td>${receipts.Result.List[j].Description}</td>
+                    <td>${receipts.Result.List[j].Amount}</td>
+                    <td>${receipts.Result.List[j].Currency}</td>
+                    <td>${receipts.Result.List[j].Project}</td>
+                `;
+                receipts.Result.List[j].Items.forEach(item => {
+                    tr += `
+                    <td>${item.Contact.Code}</td>
+                    <td>${item.Contact.Name}</td>
+                    <td>${item.Amount}</td>
+                    <td>${item.Description}</td>
+                `;
+                });
+                tr += `</tr>`;
+                tbody.innerHTML += tr;
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

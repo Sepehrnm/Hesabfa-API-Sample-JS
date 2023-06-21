@@ -131,6 +131,42 @@
         <div class="col-12">
             <h3>دریافت رسید</h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="number">شماره رسید مورد نظر</label>
+                    <input class="form-control" type="text" id="number">
+                </div>
+
+                <div class="align">
+                    <label class="form-label" for="type">نوع رسید</label>
+                    <select class="form-select" type="text" id="type">
+                        <option value="1">دریافت</option>
+                        <option value="2">پرداخت</option>
+                    </select>
+                </div>
+                <br><br>
+                <button class="btn btn-primary" onclick="getReceiptFunction()">دریافت</button>
+            </form>
+            <br>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>شماره رسید</th>
+                            <th>تاریخ رسید</th>
+                            <th>شرح</th>
+                            <th>مبلغ رسید</th>
+                            <th>واحد پول رسید</th>
+                            <th>پروژه</th>
+                            <th>کد شخص</th>
+                            <th>نام شخص</th>
+                            <th>مبلغ</th>
+                            <th>توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -148,6 +184,48 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function getReceiptFunction() {
+        const type = document.getElementById('type').value;
+        const number = document.getElementById('number').value;
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        const data = {
+            'type': type,
+            'number': number
+        }
+        const receipt = await getReceipt(data);
+        let tr = ``;
+
+        if(receipt.Success) {
+            tr = `
+                <tr>
+                    <td>${receipt.Result.Number}</td>
+                    <td>${receipt.Result.DateTime}</td>
+                    <td>${receipt.Result.Description}</td>
+                    <td>${receipt.Result.Amount}</td>
+                    <td>${receipt.Result.Currency}</td>
+                    <td>${receipt.Result.Project}</td>
+            `;
+
+            receipt.Result.Items.map(item => {
+                tr += `
+                    <td>${item.Contact.Code}</td>
+                    <td>${item.Contact.Name}</td>
+                    <td>${item.Amount}</td>
+                    <td>${item.Description}</td>
+                `;
+            });
+
+            tbody.innerHTML += tr;
+
+        } else {
+            alert(`ErrorCode: ${receipt.ErrorCode}  ErrorMessage: ${receipt.ErrorMessage}`)
+        }
+    }
 </script>
 </body>
 </html>

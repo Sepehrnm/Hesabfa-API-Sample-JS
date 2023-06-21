@@ -133,6 +133,41 @@
                 گزارش بدهکاران و بستانکاران
             </h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label for="startDate">تاریخ شروع</label>
+                    <input type="text" id="startDate">
+                </div>
+                <div class="align">
+                    <label for="endDate">تاریخ پایان</label>
+                    <input type="text" id="endDate">
+                </div>
+                <div class="align">
+                    <label for="project">پروژه</label>
+                    <input type="text" id="project">
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="balancesheetFunction()">دریافت</button>
+            </form>
+            <br>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>کد حسابداری شخص</th>
+                        <th>نام شخص</th>
+                        <th>نام دسته بندی</th>
+                        <th>مسیر دسته بندی</th>
+                        <th>گردش بدهکار</th>
+                        <th>گردش بستانکار</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +185,80 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    $('button').on('click', (e) => e.preventDefault())
+
+    async function balancesheetFunction() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        }
+        let items = await reportDebtorscreditors(data);
+        if(items.Success) {
+            let i = 0;
+            let rpp = 10;
+
+            let totalCount = items.Result.length;
+            let buttonCount = Math.ceil(totalCount/10);
+
+            createButtons(buttonCount);
+            showData(i, rpp);
+        }
+    }
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        }
+        tbody.innerHTML = ``;
+        let tr = ``;
+
+        let items = await reportDebtorscreditors(data);
+        if(items.Result) {
+            for(let j = i ; j < rpp ; j++) {
+                if(items.Result[j]) {
+                    tr = `
+                        <tr>
+                            <td>${items.Result[j].Code}</td>
+                            <td>${items.Result[j].Name}</td>
+                            <td>${items.Result[j].NodeName}</td>
+                            <td>${items.Result[j].NodeFamily}</td>
+                            <td>${items.Result[j].Debit}</td>
+                            <td>${items.Result[j].Credit}</td>
+                        </tr>
+                        `;
+                    tbody.innerHTML += tr;
+                }
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

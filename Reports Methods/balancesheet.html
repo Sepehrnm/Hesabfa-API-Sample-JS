@@ -131,6 +131,31 @@
         <div class="col-12">
             <h3>گزارش ترازنامه</h3>
             <br>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label for="startDate">تاریخ شروع</label>
+                    <input type="text" id="startDate">
+                </div>
+                <div class="align">
+                    <label for="endDate">تاریخ پایان</label>
+                    <input type="text" id="endDate">
+                </div>
+                <div class="align">
+                    <label for="project">پروژه</label>
+                    <input type="text" id="project">
+                </div>
+                <button class="btn btn-primary" onclick="balancesheetFunction()">دریافت</button>
+            </form>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -148,6 +173,26 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script>
+    $('button').on('click', (e) => e.preventDefault())
+
+    async function balancesheetFunction() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const tbody = document.getElementById('tbody');
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        }
+        let items = await balancesheet(data);
+
+        console.log(items);
+    }
 </script>
 </body>
 </html>

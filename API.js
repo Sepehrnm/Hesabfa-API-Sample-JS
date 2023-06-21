@@ -168,13 +168,13 @@ async function SaveWarehouseReceipt(data) {
 async function getReceipt(data) {
     let method = 'receipt/get';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getReceipts(data) {
     let method = 'receipt/getReceipts';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function saveReceipt(data) {
@@ -343,7 +343,7 @@ async function balancesheet(data) {
 async function reportDebtorscreditors(data) {
     let method = 'report/debtorscreditors';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function reportInventory(data) {

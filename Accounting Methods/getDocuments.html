@@ -145,7 +145,6 @@
                             <th>بدهکار</th>
                             <th>بستانکار</th>
                             <th><a href="https://hesabfa.com/help/api/TypesTable#doc-status">وضعیت سند</a></th>
-                            <th>تراکنش ها</th>
                         </tr>
                     </thead>
                     <tbody id="tbody"></tbody>
@@ -175,7 +174,7 @@
 
 <script type="text/javascript">
     $('button').on('click', (e) => e.preventDefault());
-    async function getDocumentFunction(i, rpp) {
+    async function getDocumentFunction() {
         const tbody = document.getElementById('tbody');
         tbody.innerHTML = ``;
 
@@ -183,7 +182,7 @@
             'queryInfo': {
                 SortBy: 'Date',
                 SortDesc: true,
-                Take: 20,
+                Take: 10,
                 Skip: 0
             }
         }
@@ -193,13 +192,36 @@
         if(!documentItem.Success) {
             alert(`Error: ${documentItem.ErrorCode}  ErrorMessage: ${documentItem.ErrorMessage}`);
         } else {
-            let list = documentItem.Result.List;
             let totalCount = documentItem.Result.TotalCount;
-            let buttonCount = (totalCount/10);
+            let buttonCount = Math.ceil(totalCount/10);
+
             createButtons(buttonCount);
 
-            let tr = ``;
-            for(let j = i ; j < rpp ; j++) {
+            let i = 0;
+            let rpp = 10;
+
+            showData(i, rpp);
+        }
+    }
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        const data = {
+            'queryInfo': {
+                SortBy: 'Date',
+                SortDesc: true,
+                Take: rpp,
+                Skip: 0
+            }
+        }
+        let documentItem = await getDocuments(data);
+        let list = documentItem.Result.List;
+
+        let tr = ``;
+        for(let j = i ; j < rpp ; j++) {
+            if(list) {
                 tr = `
                     <tr>
                         <td>${list[j].Number}</td>
@@ -211,7 +233,7 @@
                         <td>${list[j].Credit}</td>
                         <td>${list[j].Status}</td>
                     </tr>
-                `;
+                    `;
                 tbody.innerHTML += tr;
             }
         }
@@ -228,10 +250,10 @@
     function pageHandler(index) {
         let i = (--index) * 10;
         let rpp = i + 10;
-        getDocumentFunction(i, rpp)
+        showData(i, rpp)
     }
 
-    getDocumentFunction(0, 10);
+    getDocumentFunction();
 </script>
 </body>
 </html>
