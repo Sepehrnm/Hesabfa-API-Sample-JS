@@ -133,6 +133,15 @@
                 حذف شخص
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label for="code" class="form-label">کد شخص مورد نظر</label>
+                    <input type="text" id="code" class="form-control">
+                </div>
+                <br>
+                <button class="btn btn-danger" onclick="deleteContactFunction()">حذف</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +159,34 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+
+<script>
+    $('button').on('click', (e) => e.preventDefault());
+    async function deleteContactFunction() {
+        const code = document.getElementById('code').value;
+
+        const data = {
+            'code': code
+        }
+        const response = await deleteContact(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  حذف گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

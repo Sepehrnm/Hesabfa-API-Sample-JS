@@ -43,13 +43,13 @@ async function getContacts(data) {
 async function saveContact(data) {
     let method = 'contact/save';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function deleteContact(data) {
     let method = 'contact/delete';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getContactLink(data) {
@@ -87,13 +87,13 @@ async function getItems(data) {
 async function saveItem(data) {
     let method = 'item/save';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function deleteItem(data) {
     let method = 'item/delete';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getItemQuantity() {
@@ -103,10 +103,10 @@ async function getItemQuantity() {
     return (result.Result);
 }
 
-async function UpdateItemOpeningQuantity(data) {
+async function updateItemOpeningQuantity(data) {
     let method = 'item/UpdateOpeningQuantity';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 // Invoices Methods

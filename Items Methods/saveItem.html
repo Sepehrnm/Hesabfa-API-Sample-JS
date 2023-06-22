@@ -133,6 +133,90 @@
                 ذخیره کالا یا خدمات
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="code" class="form-label">کد حسابداری کالا یا خدمات</label>
+                        <input type="text" id="code" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="name" class="form-label">نام کالا</label>
+                        <input type="text" id="name" class="form-control">
+                    </div>
+                </div>
+
+                <div class="halign">
+                    <div class="align">
+                        <label for="itemType" class="form-label">نوع</label>
+                        <select name="itemType" id="itemType" class="form-select">
+                            <option value="-1">انتخاب کنید</option>
+                            <option value="0">کالا</option>
+                            <option value="1">خدمات</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="barcode" class="form-label">بارکد کالا/خدمات</label>
+                        <input type="text" id="barcode" class="form-control">
+                    </div>
+
+                    <div class="align">
+                        <label for="unit" class="form-label">واحد کالا</label>
+                        <input type="text" id="unit" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="buyPrice" class="form-label">قیمت خرید</label>
+                        <input type="text" id="buyPrice" class="form-control">
+                    </div>
+                </div>
+
+                <div class="halign">
+                    <div class="align">
+                        <label for="sellPrice" class="form-label">قیمت فروش</label>
+                        <input type="text" class="form-control" id="sellPrice">
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="purchasesTitle" class="form-label">عنوان در فاکتور فروش</label>
+                        <input type="text" id="purchasesTitle" class="form-control">
+                    </div>
+
+                    <div class="align">
+                        <label for="salesTitle" class="form-label">عنوان در فاکتور خرید</label>
+                        <input type="text" id="salesTitle" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="tag" class="form-label">Tag</label>
+                        <input type="text" id="tag" class="form-control">
+                    </div>
+                </div>
+
+                <div class="halign">
+                    <div class="align">
+                        <label for="description" class="form-label">توضیحات</label>
+                        <input type="text" class="form-control" id="description">
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="productCode" class="form-label">کد کالا یا خدمات</label>
+                        <input type="text" id="productCode" class="form-control">
+                    </div>
+
+                    <div class="align">
+                        <label for="active" class="form-label">وضعیت کالا</label>
+                        <select name="active" id="active" class="form-select">
+                            <option value="true">فعال</option>
+                            <option value="false">غیرفعال</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="nodeFamily" class="form-label">دسته بندی کالا</label>
+                        <input title="یک فیلد متنی که به فرمت زیر می توان دسته بندی کالا یا خدمات را در آن تعریف کرد. برای کالا: 'کالاها: دسته 1: دسته 2: ...' برای خدمات: 'خدمات: دسته 1: دسته 2: ...'" type="text" id="nodeFamily" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="saveItemFunction()">ذخیره</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +234,61 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function saveItemFunction() {
+        const code = document.getElementById('code').value;
+        const name = document.getElementById('name').value;
+        const itemType = document.getElementById('itemType').value;
+        const barcode = document.getElementById('barcode').value;
+        const unit = document.getElementById('unit').value;
+        const buyPrice = document.getElementById('buyPrice').value;
+        const sellPrice = document.getElementById('sellPrice').value;
+        const purchasesTitle = document.getElementById('purchasesTitle').value;
+        const salesTitle = document.getElementById('salesTitle').value;
+        const tag = document.getElementById('tag').value;
+        const description = document.getElementById('description').value;
+        const productCode = document.getElementById('productCode').value;
+        const active = document.getElementById('active').value;
+        const nodeFamily = document.getElementById('nodeFamily').value;
+
+        const data = {
+            'item': {
+                'code': code ? code : null,
+                'name': name,
+                'itemType': itemType,
+                'barcode': barcode ? barcode : null,
+                'unit': unit ? unit : null,
+                'buyPrice': buyPrice ? buyPrice : null,
+                'sellPrice': sellPrice ? sellPrice : null,
+                'purchasesTitle': purchasesTitle ? purchasesTitle : null,
+                'salesTitle': salesTitle ? salesTitle : null,
+                'tag': tag ? tag : null,
+                'description': description ? description : null,
+                'productCode': productCode ? productCode : null,
+                'active': active ? active : null,
+                'nodeFamily': nodeFamily ? nodeFamily : null,
+            }
+        }
+
+        let response = await saveItem(data);
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  ذخیره گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

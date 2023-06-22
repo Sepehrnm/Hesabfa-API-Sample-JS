@@ -126,6 +126,9 @@
         </li>
     </ul>
 </nav>
+<script>
+    var i = 2;
+</script>
 <div class="row">
     <div class="container">
         <div class="col-12">
@@ -133,6 +136,53 @@
                 به روز رسانی موجودی اول دوره کالاها
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <table class="table-striped table table-light">
+                    <thead>
+                        <tr>
+                            <th>
+                                کد کالا
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                تعداد
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                مبلغ واحد
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                کد انبار
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="quantity-tbody">
+                        <tr>
+                            <td>
+                                <input type="hidden" value="1" name="counter" id="counter">
+                                <input class="accounting-input" type="text" id="code1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="quantity1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="unitPrice1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="warehouseCode1" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <div id="buttons-container">
+                <button id="deleteRow" class="deleteRow btn btn-danger m-2"><span class="m-2">-</span>حذف ردیف</button>
+                <button id="addNewRow" class="addNewRow btn btn-secondary m-2"><span class="m-2">+</span>افزودن ردیف</button>
+            </div>
+
+                <button onclick="updateQuantityFunction()" class="btn btn-primary">بروزرسانی</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +200,65 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#addNewRow").on('click', (e) => {
+            e.preventDefault();
+            let element = `
+                <tr id="element-${i}">
+                    <input type="hidden" value="${i}" id="counter">
+                    <td><input type="text" id="code${i}" class="accounting-input" required /></td>
+                    <td><input type="text" id="quantity${i}" required /></td>
+                    <td><input type="text" id="unitPrice${i}" required /></td>
+                    <td><input type="text" id="warehouseCode${i}" /></td>
+                </tr>`;
+            ++i;
+            $(".quantity-tbody").append(element);
+        });
+
+        $("#deleteRow").on('click', (e) => {
+            e.preventDefault();
+            if(i>2) {
+                $(`.quantity-tbody`).children().last().remove();
+                i--;
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function updateQuantityFunction() {
+        let counter = $('#counter').val();
+        let data = [];
+        let item = {};
+        let code;
+        let quantity;
+        let unitPrice;
+        let warehouseCode;
+
+        for(let j = 1 ; j <= counter ; j++) {
+            code = $(`#code${j}`).val();
+            quantity = $(`#quantity${j}`).val();
+            unitPrice = $(`#unitPrice${j}`).val();
+            warehouseCode = $(`#warehouseCode${j}`).val();
+
+            item = {
+                'code': code,
+                'quantity': quantity,
+                'unitPrice': unitPrice,
+                'warehouseCode': warehouseCode
+            }
+            data.push(item);
+            console.log(item)
+
+
+        }
+
+        console.log(data)
+
+        // const response = await updateItemOpeningQuantity(data);
+    }
 </script>
 </body>
 </html>

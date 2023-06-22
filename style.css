@@ -67,8 +67,9 @@ html {
     direction: ltr;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 0 1rem;
+    margin-top: 2rem;
 }
 
 .save-invoice-form div {
