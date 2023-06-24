@@ -133,6 +133,69 @@
                 ذخیره رسید
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="type" class="form-label">نوع رسید</label>
+                        <select name="type" id="type" class="form-select">
+                            <option value="-1">انتخاب کنید</option>
+                            <option value="1">دریافت</option>
+                            <option value="2">پرداخت</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="number" class="form-label">شماره رسید</label>
+                        <input type="text" class="form-control" id="number">
+                    </div>
+                    <div class="align">
+                        <label for="dateTime" class="form-label">تاریخ</label>
+                        <input type="text" class="form-control" id="dateTime">
+                    </div>
+                    <div class="align">
+                        <label for="project" class="form-label">نام پروژه</label>
+                        <input type="text" class="form-control" id="project">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="description" class="form-label">شرح رسید</label>
+                        <input type="text" class="form-control" id="description">
+                    </div>
+                    <div class="align">
+                        <label for="bankCode" class="form-label">کد بانک</label>
+                        <input type="text" class="form-control" id="bankCode">
+                    </div>
+                    <div class="align">
+                        <label for="contactCode" class="form-label">کد شخص</label>
+                        <input type="text" class="form-control" id="contactCode">
+                    </div>
+                    <div class="align">
+                        <label for="amount" class="form-label">مبلغ به ارز پایه سیستم</label>
+                        <input type="text" class="form-control" id="amount">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="bankFee" class="form-label">کارمزد خدمات بانکی</label>
+                        <input type="text" id="bankFee" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="reference" class="form-label">شماره ارجاع</label>
+                        <input type="text" id="reference" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="cashCode" class="form-label">کد صندوق</label>
+                        <input type="text" id="cashCode" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="pettyCashCode" class="form-label">کد تنخواه گردان</label>
+                        <input type="text" id="pettyCashCode" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="saveReceiptFunction()">ذخیره</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +213,73 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function saveReceiptFunction() {
+        const type =document.getElementById('type').value;
+        const number =document.getElementById('number').value;
+        const dateTime =document.getElementById('dateTime').value;
+        const project =document.getElementById('project').value;
+        const description =document.getElementById('description').value;
+        const bankCode =document.getElementById('bankCode').value;
+        const contactCode =document.getElementById('contactCode').value;
+        const amount =document.getElementById('amount').value;
+        const bankFee =document.getElementById('bankFee').value;
+        const reference =document.getElementById('reference').value;
+        const cashCode =document.getElementById('cashCode').value;
+        const pettyCashCode =document.getElementById('pettyCashCode').value;
+
+        let data = {
+            type: type,
+            description: description,
+            amount: amount,
+            contactCode: contactCode,
+            bankCode: bankCode,
+            currency: 'IRR',
+            currencyRate: 1,
+            reference: reference,
+            project: project,
+            number: number,
+            bankFee: bankFee
+        }
+
+        if(bankCode) {
+            data.bankCode = bankCode;
+            data.cashCode = null;
+            data.pettyCashCode = null;
+        }
+
+        if(cashCode) {
+            data.bankCode = null;
+            data.cashCode = cashCode;
+            data.pettyCashCode = null;
+        }
+
+        if(pettyCashCode) {
+            data.bankCode = null;
+            data.cashCode = null;
+            data.pettyCashCode = pettyCashCode;
+        }
+
+        const response = await saveReceipt(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  ذخیره گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

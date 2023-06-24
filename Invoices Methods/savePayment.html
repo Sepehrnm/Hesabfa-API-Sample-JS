@@ -133,6 +133,89 @@
                 ثبت دریافت و پرداخت فاکتور
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <div class="text-danger lh-lg">
+                <strong>نکات ضروری</strong>
+                <br>
+                فقط یکی از سه فیلد bankCode، cashCode و pettyCashCode باید مقدار داشته باشد.
+                <br>
+                واحد پول فاکتور با واحد پول بانک، صندوق یا تنخواه گردان باید یکی باشد.
+                <br>
+                <strong>توضیحات فیلد transactionFee</strong>
+                <br>
+                در صورت ذکر نشدن currency و currencyRate از مقادیر ذکر شده در فاکتور استفاده خواهد شد.
+                توضیحات فیلد transactionFee
+                <br>
+                در صورتی که به ازای پرداخت آنلاین مبلغی بابت هزینه تراکنش از حساب شما کسر می شود این هزینه را
+                <br>
+                می توانید در این فیلد ثبت کنید تا سند هزینه به طور اتوماتیک صادر شود.
+                <br><br>
+            </div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="type" class="form-label">نوع فاکتور</label>
+                        <select name="type" id="type" class="form-select">
+                            <option selected>انتخاب کنید</option>
+                            <option value="0">فروش</option>
+                            <option value="1">خرید</option>
+                            <option value="2">برگشت از فروش</option>
+                            <option value="3">برگشت از خرید</option>
+                            <option value="4">ضایعات</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="number" class="form-label">شماره فاکتور فروش</label>
+                        <input type="text" id="number" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="bankCode" class="form-label">کد بانک</label>
+                        <input type="text" id="bankCode" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="date" class="form-label">تاریخ تراکنش</label>
+                        <input type="text" id="date" class="form-control">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="amount" class="form-label">مبلغ تراکنش</label>
+                        <input type="text" id="amount" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="transactionNumber" class="form-label">شماره تراکنش</label>
+                        <input type="text" id="transactionNumber" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="description" class="form-label">توضیحات تراکنش</label>
+                        <input type="text" id="description" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="transactionFee" class="form-label">هزینه یا کارمزد تراکنش</label>
+                        <input type="text" id="transactionFee" class="form-control">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="currency" class="form-label">واحد پول</label>
+                        <input type="text" id="currency" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="currencyRate" class="form-label">نرخ برابری ارز به ارز پایه</label>
+                        <input type="text" id="currencyRate" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="cashCode" class="form-label">کد صندوق</label>
+                        <input type="text" id="cashCode" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="pettyCashCode" class="form-label">کد تنخواه گردان</label>
+                        <input type="text" id="pettyCashCode" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="savePaymentFunction()">ذخیره</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +233,55 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function savePaymentFunction() {
+        const type = document.getElementById('type').value;
+        const number = document.getElementById('number').value;
+        const bankCode = document.getElementById('bankCode').value;
+        const date = document.getElementById('date').value;
+        const amount = document.getElementById('amount').value;
+        const transactionNumber = document.getElementById('transactionNumber').value;
+        const description = document.getElementById('description').value;
+        const transactionFee = document.getElementById('transactionFee').value;
+        const currency = document.getElementById('currency').value;
+        const currencyRate = document.getElementById('currencyRate').value;
+        const cashCode = document.getElementById('cashCode').value;
+        const pettyCashCode = document.getElementById('pettyCashCode').value;
+
+        const data = {
+            'type': type,
+            'number': number,
+            'bankCode': bankCode,
+            'date': date,
+            'amount': amount,
+            'transactionNumber': transactionNumber,
+            'description': description,
+            'transactionFee': transactionFee,
+            'currency': currency,
+            'currencyRate': currencyRate,
+            'cashCode': cashCode,
+            'pettyCashCode': pettyCashCode,
+        }
+        const response = await savePayment(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  ذخیره گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

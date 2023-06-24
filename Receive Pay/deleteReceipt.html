@@ -131,6 +131,25 @@
         <div class="col-12">
             <h3>حذف رسید</h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="type" class="form-label">نوع رسید</label>
+                        <select name="type" id="type" class="form-select">
+                            <option selected>انتخاب کنید</option>
+                            <option value="1">دریافت</option>
+                            <option value="2">پرداخت</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="number" class="form-label">شماره رسید</label>
+                        <input type="text" id="number" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-danger" onclick="deleteReceiptFunction()">حذف رسید</button>
+            </form>
         </div>
     </div>
 </div>
@@ -148,6 +167,34 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function deleteReceiptFunction() {
+        const type = document.getElementById('type').value;
+        const number = document.getElementById('number').value;
+
+        const data = {
+            'type': type,
+            'number': number
+        };
+        const response = await deleteReceipt(data);
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                حذف گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

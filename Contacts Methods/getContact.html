@@ -175,6 +175,7 @@
                 code: code
             }
             let contact = await getContact(data);
+            contact = contact.Result;
             const tableRowTd = document.getElementById('tableRowTd');
             const tableRowTh = document.getElementById('tableRowTh');
             tableRowTh.innerHTML = ``;

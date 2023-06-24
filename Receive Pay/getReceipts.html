@@ -256,6 +256,7 @@
 
     function createButtons(buttonCount) {
         const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.innerHTML = ``;
         for(let z=1 ; z<=buttonCount ; z++) {
             var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
             buttonsContainer.innerHTML += button;

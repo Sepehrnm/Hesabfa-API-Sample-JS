@@ -7,7 +7,6 @@ async function apiRequest(method, data) {
         loginToken: 'af014d3ed841a5d23bfd378670e2fc7e2e15d42b606f62e6a719be090b501343f45531c55f640319dd131dd9649c3709',
         ...data
     }
-
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -25,7 +24,7 @@ async function apiRequest(method, data) {
 async function getContact(data) {
     let method = 'contact/get';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getContactById(data) {
@@ -136,7 +135,7 @@ async function getInvoices(queryInfo, type) {
 async function saveInvoice(data) {
     let method = 'invoice/save';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function deleteInvoice(data) {
@@ -148,7 +147,7 @@ async function deleteInvoice(data) {
 async function savePayment(data) {
     let method = 'invoice/savepayment';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getOnlineInvoiceURL(data) {
@@ -180,13 +179,13 @@ async function getReceipts(data) {
 async function saveReceipt(data) {
     let method = 'receipt/save';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function deleteReceipt(data) {
     let method = 'receipt/delete';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 // Accounting Methods
