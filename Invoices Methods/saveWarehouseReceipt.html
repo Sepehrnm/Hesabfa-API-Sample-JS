@@ -15,6 +15,9 @@
     <link rel="icon" href="../Assets/hesabfaIcon.png">
 </head>
 <body>
+<script>
+    var i = 2;
+</script>
 <nav>
     <ul>
         <li>
@@ -133,6 +136,116 @@
                 ذخیره حواله انبار
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <div class="text-danger">
+                <strong>نکات ضروری</strong>
+                <br>
+                با فراخوانی این متد رسید یا حواله انبار برای فاکتور خرید یا فروش صادر می گردد. در صورتی که کالاهای فاکتور در چندین انبار مختلف وجود داشته باشند به ازای هر انبار باید یکبار این متد را فراخوانی کرد و در هر فراخوانی کالاها و تعداد مورد نیاز به تفکیک انبار ذکر گردد.
+                <br>
+                در صورتی که مقدار پارامتر deleteOldReceipts=true باشد، کلیه حواله های قبلی صادر شده برای فاکتور حذف خواهند شد و حواله جدید صادر می شود.
+                <br>
+                کلیه آیتم های باید از نوع کالا و با قابلیت کنترل موجودی باشند در غیر اینصورت حواله ثبت نخواهد شد.
+            </div>
+            <br><br>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="deleteOldReceipts" class="form-label">حذف رسید یا حواله قدیمی</label>
+                        <select name="deleteOldReceipts" id="deleteOldReceipts" class="form-select">
+                            <option selected>انتخاب کنید</option>
+                            <option value="true">بله</option>
+                            <option value="false">خیر</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="warehouseCode" class="form-label">کد انبار</label>
+                        <input type="text" class="form-control" id="warehouseCode">
+                    </div>
+                    <div class="align">
+                        <label for="invoiceNumber" class="form-label">شماره فاکتور</label>
+                        <input type="text" class="form-control" id="invoiceNumber">
+                    </div>
+                    <div class="align">
+                        <label for="invoiceType" class="form-label">نوع فاکتور</label>
+                        <select name="invoiceType" id="invoiceType" class="form-select">
+                            <option selected>انتخاب کنید</option>
+                            <option value="0">فروش</option>
+                            <option value="1">خرید</option>
+                            <option value="2">برگشت از فروش</option>
+                            <option value="3">برگشت از خرید</option>
+                            <option value="4">ضایعات</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="date" class="form-label">تاریخ حواله</label>
+                        <input type="text" class="form-control" id="date">
+                    </div>
+                    <div class="align">
+                        <label for="note" class="form-label">یادداشت و توضیحات</label>
+                        <input type="text" class="form-control" id="note">
+                    </div>
+                    <div class="align">
+                        <label for="freight" class="form-label">هزینه حمل</label>
+                        <input type="text" class="form-control" id="freight">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="delivery" class="form-label">تحویل (در محل انبار)</label>
+                        <input type="text" class="form-control" id="delivery">
+                    </div>
+                    <div class="align">
+                        <label for="project" class="form-label">پروژه</label>
+                        <input type="text" class="form-control" id="project">
+                    </div>
+                </div>
+                <br>
+                <table class="table-striped table table-light">
+                    <thead>
+                    <tr>
+                        <th>
+                            کد کالا
+                            <span style="color: red;font-size: 1.2rem;">*</span>
+                        </th>
+                        <th>
+                            تعداد
+                            <span style="color: red;font-size: 1.2rem;">*</span>
+                        </th>
+                        <th>
+                            ارجاع
+                        </th>
+                        <th>
+                            توضیحات
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="quantity-tbody">
+                    <tr>
+                        <td>
+                            <input type="hidden" value="1" name="counter" class="counter">
+                            <input class="accounting-input" type="text" id="itemCode1" required />
+                        </td>
+                        <td>
+                            <input type="text" id="quantity1" required />
+                        </td>
+                        <td>
+                            <input type="text" id="reference1" />
+                        </td>
+                        <td>
+                            <input type="text" id="note1" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="buttons-container" style="justify-content: flex-end;">
+                    <button id="deleteRow" class="deleteRow btn btn-danger m-2"><span class="m-2">-</span>حذف ردیف</button>
+                    <button id="addNewRow" class="addNewRow btn btn-secondary m-2"><span class="m-2">+</span>افزودن ردیف</button>
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="saveWarehouseReceiptFunction()">ذخیره</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +263,98 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#addNewRow").on('click', (e) => {
+            e.preventDefault();
+            let element = `
+                <tr id="element-${i}">
+                    <input type="hidden" value="${i}" class="counter">
+                    <td><input type="text" id="itemCode${i}" class="accounting-input" required /></td>
+                    <td><input type="text" id="quantity${i}" required /></td>
+                    <td><input type="text" id="reference${i}" required /></td>
+                    <td><input type="text" id="note${i}" /></td>
+                </tr>`;
+            ++i;
+            $(".quantity-tbody").append(element);
+        });
+
+        $("#deleteRow").on('click', (e) => {
+            e.preventDefault();
+            if(i>2) {
+                $(`.quantity-tbody`).children().last().remove();
+                i--;
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function saveWarehouseReceiptFunction() {
+        const deleteOldReceipts = document.getElementById('deleteOldReceipts').value;
+        const warehouseCode = document.getElementById('warehouseCode').value;
+        const invoiceNumber = document.getElementById('invoiceNumber').value;
+        const invoiceType = document.getElementById('invoiceType').value;
+        const date = document.getElementById('date').value;
+        const note = document.getElementById('note').value;
+        const freight = document.getElementById('freight').value;
+        const delivery = document.getElementById('delivery').value;
+        const project = document.getElementById('project').value;
+
+        // let counter = $('.counter').val();
+        let counter = i;
+
+        let data;
+        let item;
+        let items = [];
+        for(let j = 1 ; j < counter ; j++) {
+            let itemCode = document.getElementById(`itemCode${j}`).value;
+            let quantity = document.getElementById(`quantity${j}`).value;
+            let reference = document.getElementById(`reference${j}`).value;
+            let note = document.getElementById(`note${j}`).value;
+
+            item = {
+                'ItemCode': itemCode,
+                'Quantity': quantity,
+                'Reference': reference,
+                'Notes': note
+            }
+
+            items.push(item);
+        }
+        data = {
+            'deleteOldReceipts': deleteOldReceipts,
+            'receipt':{
+                'WarehouseCode': warehouseCode,
+                'InvoiceNumber': invoiceNumber,
+                'InvoiceType': invoiceType,
+                'Date': date,
+                'Notes': note,
+                'Freight': freight,
+                'Delivery': delivery,
+                'Project': project,
+                'Items': items
+            }
+        };
+        const response = await saveWarehouseReceipt(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  ذخیره گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

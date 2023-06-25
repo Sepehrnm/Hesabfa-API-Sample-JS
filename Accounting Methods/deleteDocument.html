@@ -133,6 +133,23 @@
                 حذف سند حسابداری
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <div class="text-danger">
+                <strong>نکات ضروری</strong>
+                <br>
+                توجه کنید که فقط اسناد دستی قابل حذف هستند.
+            </div>
+            <br>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="number" class="form-label">شماره سند</label>
+                        <input type="text" class="form-control" id="number">
+                        <br>
+                        <button class="btn btn-danger" onclick="deleteDocumentFunction()">حذف</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +167,32 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function deleteDocumentFunction() {
+        const number = document.getElementById("number").value;
+        const data = {
+            "number": number
+        };
+        const response = await deleteDocument(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  حذف گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

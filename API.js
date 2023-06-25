@@ -141,7 +141,7 @@ async function saveInvoice(data) {
 async function deleteInvoice(data) {
     let method = 'invoice/delete';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function savePayment(data) {
@@ -156,10 +156,10 @@ async function getOnlineInvoiceURL(data) {
     return (result);
 }
 
-async function SaveWarehouseReceipt(data) {
+async function saveWarehouseReceipt(data) {
     let method = 'invoice/SaveWarehouseReceipt';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 // ReceivePay Methods
@@ -199,7 +199,7 @@ async function getDocument(data) {
 async function saveDocument(data) {
     let method = 'document/save';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getDocuments(data) {
@@ -211,7 +211,7 @@ async function getDocuments(data) {
 async function deleteDocument(data) {
     let method = 'document/delete';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 // Other Methods
@@ -268,7 +268,7 @@ async function getProductCategories() {
     let method = 'setting/GetProductCategories';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getServiceCategories(data) {
@@ -348,7 +348,7 @@ async function reportDebtorscreditors(data) {
 async function reportInventory(data) {
     let method = 'report/inventory';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function profitAndLoss(data) {
@@ -360,11 +360,11 @@ async function profitAndLoss(data) {
 async function trialBalance(data) {
     let method = 'report/trialbalance';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function trialBalanceItems(data) {
     let method = 'report/trialbalanceitems';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }

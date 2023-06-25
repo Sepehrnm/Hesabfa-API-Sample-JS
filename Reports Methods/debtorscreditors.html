@@ -133,21 +133,22 @@
                 گزارش بدهکاران و بستانکاران
             </h3>
             <br>
+            <div id="alert-container"></div>
             <form method="post" class="save-contact-form">
                 <div class="align">
-                    <label for="startDate">تاریخ شروع</label>
-                    <input type="text" id="startDate">
+                    <label class="form-label" for="startDate">تاریخ شروع</label>
+                    <input class="form-control" type="text" id="startDate">
                 </div>
                 <div class="align">
-                    <label for="endDate">تاریخ پایان</label>
-                    <input type="text" id="endDate">
+                    <label class="form-label" for="endDate">تاریخ پایان</label>
+                    <input class="form-control" type="text" id="endDate">
                 </div>
                 <div class="align">
-                    <label for="project">پروژه</label>
-                    <input type="text" id="project">
+                    <label class="form-label" for="project">پروژه</label>
+                    <input class="form-control" type="text" id="project">
                 </div>
                 <br>
-                <button class="btn btn-primary" onclick="balancesheetFunction()">دریافت</button>
+                <button class="btn btn-primary" onclick="debtsorcreditsFunction()">دریافت</button>
             </form>
             <br>
             <div class="table table-responsive">
@@ -189,7 +190,7 @@
 <script>
     $('button').on('click', (e) => e.preventDefault())
 
-    async function balancesheetFunction() {
+    async function debtsorcreditsFunction() {
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const project = document.getElementById('project').value;
@@ -214,6 +215,7 @@
 
     async function showData(i, rpp) {
         const tbody = document.getElementById('tbody');
+
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const project = document.getElementById('project').value;
@@ -248,6 +250,7 @@
 
     function createButtons(buttonCount) {
         const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.innerHTML = ``;
         for(let z=1 ; z<=buttonCount ; z++) {
             var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
             buttonsContainer.innerHTML += button;

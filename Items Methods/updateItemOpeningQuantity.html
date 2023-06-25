@@ -229,9 +229,11 @@
 <script type="text/javascript">
     $('button').on('click', (e) => e.preventDefault())
     async function updateQuantityFunction() {
-        let counter = $('#counter').val();
+        // let counter = $('#counter').val();
+        let counter = i;
         let data = [];
         let item = {};
+        let items = [];
         let code;
         let quantity;
         let unitPrice;
@@ -249,15 +251,29 @@
                 'unitPrice': unitPrice,
                 'warehouseCode': warehouseCode
             }
-            data.push(item);
-            console.log(item)
-
-
+            items.push(item);
         }
 
-        console.log(data)
+        data = {
+            'items': items
+        };
 
-        // const response = await updateItemOpeningQuantity(data);
+        const response = await updateItemOpeningQuantity(data);
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  ذخیره گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
     }
 </script>
 </body>

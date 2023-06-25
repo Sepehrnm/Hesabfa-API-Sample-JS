@@ -133,6 +133,44 @@
                 گزارش تراز آزمایشی
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="startDate">تاریخ شروع</label>
+                    <input class="form-control" type="text" id="startDate">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="endDate">تاریخ پایان</label>
+                    <input class="form-control" type="text" id="endDate">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="project">پروژه</label>
+                    <input class="form-control" type="text" id="project">
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="trialBalanceFunction()">دریافت</button>
+            </form>
+            <br>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>گردش بدهکار</th>
+                        <th>گردش بستانکار</th>
+                        <th>تراز حساب</th>
+                        <th><a href="https://hesabfa.com/help/api/TypesTable#balance-type">ماهیت حساب</a></th>
+                        <th>تراز افتتاحیه - بدهکار</th>
+                        <th>تراز افتتاحیه - بستانکار</th>
+                        <th>مانده از قبل - بدهکار</th>
+                        <th>مانده از قبل - بستانکار</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +188,83 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function trialBalanceFunction() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        };
+        const items = await trialBalance(data);
+        if(items.Success) {
+            let i = 0;
+            let rpp = 10;
+
+            let totalCount = items.Result.length;
+            let buttonCount = Math.ceil(totalCount/10);
+
+            createButtons(buttonCount);
+            showData(i, rpp);
+        }
+    }
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        }
+        tbody.innerHTML = ``;
+        let tr = ``;
+
+        let items = await trialBalance(data);
+        if(items.Result) {
+            for(let j = i ; j < rpp ; j++) {
+                if(items.Result[j]) {
+                    tr = `
+                        <tr>
+                            <td>${items.Result[j].Debit}</td>
+                            <td>${items.Result[j].Credit}</td>
+                            <td>${items.Result[j].Balance}</td>
+                            <td>${items.Result[j].BalanceType}</td>
+                            <td>${items.Result[j].OpeningDebit}</td>
+                            <td>${items.Result[j].OpeningCredit}</td>
+                            <td>${items.Result[j].RemainingDebit}</td>
+                            <td>${items.Result[j].RemainingCredit}</td>
+                        </tr>
+                        `;
+                    tbody.innerHTML += tr;
+                }
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.innerHTML = ``;
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

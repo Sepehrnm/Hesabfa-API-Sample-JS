@@ -133,6 +133,49 @@
                 گزارش موجودی کالا
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label class="form-label" for="startDate">تاریخ شروع</label>
+                        <input class="form-control" type="text" id="startDate">
+                    </div>
+                    <div class="align">
+                        <label class="form-label" for="endDate">تاریخ پایان</label>
+                        <input class="form-control" type="text" id="endDate">
+                    </div>
+                    <div class="align">
+                        <label class="form-label" for="project">عنوان پروژه</label>
+                        <input class="form-control" type="text" id="project">
+                    </div>
+                </div>
+                <br>
+                <button onclick="reportInventoryFunction()" class="btn btn-primary">دریافت</button>
+            </form>
+            <div class="table table-responsive">
+                <table id="table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>کدحسابداری</th>
+                        <th>نام</th>
+                        <th>نام دسته بندی</th>
+                        <th>مسیر دسته بندی</th>
+                        <th>واحد اصلی</th>
+                        <th>واحد فرعی</th>
+                        <th>کد محصول</th>
+                        <th>مبلغ</th>
+                        <th>تعداد</th>
+                        <th>موجودی اول دوره</th>
+                        <th>افزایش طی دوره</th>
+                        <th>کاهش طی دوره</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +193,100 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function reportInventoryFunction() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        };
+
+        const response = await reportInventory(data);
+
+        if(!response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+                `)
+            } else {
+                const inventory = response.Result;
+                const totalCount = inventory.length;
+                const buttonCount = Math.ceil(totalCount/10);
+                createButtons(buttonCount);
+                let i=0;
+                let rpp=10;
+                showData(i, rpp);
+        }
+    }
+
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null
+        };
+
+        const response = await reportInventory(data);
+        const inventory = response.Result;
+        tbody.innerHTML = ``;
+
+        let tr = ``;
+        if (inventory) {
+            for (let j = i; j < rpp; j++) {
+                if(inventory[j]) {
+                    tr = `
+                    <tr>
+                        <td>${inventory[j].Code}</td>
+                        <td>${inventory[j].Name}</td>
+                        <td>${inventory[j].NodeName}</td>
+                        <td>${inventory[j].NodeFamily}</td>
+                        <td>${inventory[j].MainUnit}</td>
+                        <td>${inventory[j].SubUnit}</td>
+                        <td>${inventory[j].ProductCode}</td>
+                        <td>${inventory[j].Amount}</td>
+                        <td>${inventory[j].Quantity}</td>
+                        <td>${inventory[j].Opening}</td>
+                        <td>${inventory[j].Increase}</td>
+                        <td>${inventory[j].Decrease}</td>
+                    </tr>
+                    `;
+                    i++;
+                    tbody.innerHTML += (tr);
+                }
+            }
+        }
+    }
+
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.innerHTML = ``;
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>

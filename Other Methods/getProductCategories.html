@@ -13,6 +13,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <link rel="icon" href="../Assets/hesabfaIcon.png">
+    <style>
+        .tree-item {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -132,48 +137,47 @@
             <h3>
                 دریافت لیست دسته بندی کالاها
             </h3>
-            <div id="category-container"></div>
+            <div id="tree"></div>
         </div>
     </div>
 </div>
 <script type='text/javascript'>
     function init() {
-        ('button.dropbtn').on('click', (e) => {
-            (".dropdown-content").slideUp();
-            (e.target).next().stop().slideToggle();
+        $('button.dropbtn').on('click', (e) => {
+            $(".dropdown-content").slideUp();
+            $(e.target).next().stop().slideToggle();
         });
     }
 
-    ( document ).ready(() => {
+    $( document ).ready(() => {
         init();
     });
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
-    ('a[href="../' + path + '"]').parent().slideDown();
+    $('a[href="../' + path + '"]').parent().slideDown();
 </script>
 
-<script>
-    // var html = ``;
-    // var result;
-    //
-    // async function getProductCategoriesFunction() {
-    //     let categories = await getProductCategories();
-    //     result = showCategory(categories.Root);
-    //     console.log(result);
-    //
-    //     if(result.length > 0) {
-    //         showCategory(result);
-    //     }
-    // }
-    //
-    // function showCategory(item) {
-    //     let categoryContainer = document.getElementById('category-container');
-    //     categoryContainer.innerHTML += (html);
-    //
-    //     return item.Children;
-    // }
-    // getProductCategoriesFunction();
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    var i = 0;
 
+    async function getProductCategoriesFunction() {
+        let categories = await getProductCategories();
+        showCategory(categories.Result.Root);
+    }
+
+    function showCategory(node) {
+        const tree = document.getElementById('tree');
+        let fullPath = node.FullPath;
+        tree.innerHTML += `<div class="tree-item div-level-${i}">${node.Name}</div>`;
+
+        if(node.Children.length > 0) {
+            node.Children.map(subNode => {
+                showCategory(subNode);
+            })
+        }
+    }
+    getProductCategoriesFunction();
 </script>
 </body>
 </html>

@@ -133,6 +133,28 @@
                 حذف فاکتور
             </h3>
             <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="number" class="form-label">شماره فاکتور مورد نظر</label>
+                        <input type="text" id="number" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="type" class="form-label">نوع فاکتور</label>
+                        <select name="type" id="type" class="form-select">
+                            <option selected>انتخاب کنید</option>
+                            <option value="0">فروش</option>
+                            <option value="1">خرید</option>
+                            <option value="2">برگشت از فروش</option>
+                            <option value="3">برگشت از خرید</option>
+                            <option value="4">ضایعات</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <button onclick="deleteInvoiceFunction()" class="btn btn-danger">حذف</button>
+            </form>
         </div>
     </div>
 </div>
@@ -150,6 +172,35 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function deleteInvoiceFunction() {
+        const number = document.getElementById('number').value;
+        const type = document.getElementById('type').value;
+
+        const data = {
+            'number': number,
+            'type': type
+        };
+        const response = await deleteInvoice(data);
+
+        if(response.Success) {
+            $('#alert-container').html(`
+                <div class="alert alert-success" role="alert">
+                  حذف گردید
+                </div>
+            `)
+        } else {
+            $('#alert-container').html(`
+                <div class="alert alert-danger" role="alert" style="direction: ltr;">
+                    ErrorCode: ${response.ErrorCode}
+                    <br>
+                    ErrorMessage: ${response.ErrorMessage}
+                </div>
+            `)
+        }
+    }
 </script>
 </body>
 </html>

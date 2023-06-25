@@ -133,6 +133,52 @@
                 گزارش آیتم های تفصیل تراز آزمایشی
             </h3>
             <br>
+            <div class="text-danger">
+                <strong>نکات ضروری</strong>
+                <br>
+                درصورتی که تفصیل حساب انتخاب شده کالا باشد،فیلد Code و Name مربوط به کالا خواهد بود.درصورتی که تفصیل حساب انتخاب شده شخص باشد فیلد Code و Name مربوط به شخص خواهد بود و بدین ترتیب...
+            </div>
+            <br>
+            <div id="alert-container"></div>
+            <form method="post" class="save-contact-form">
+                <div class="align">
+                    <label class="form-label" for="startDate">تاریخ شروع</label>
+                    <input class="form-control" type="text" id="startDate">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="endDate">تاریخ پایان</label>
+                    <input class="form-control" type="text" id="endDate">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="project">پروژه</label>
+                    <input class="form-control" type="text" id="project">
+                </div>
+                <div class="align">
+                    <label class="form-label" for="accountPath">مسیر حساب</label>
+                    <input class="form-control" type="text" id="accountPath">
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="trialBalanceItemsFunction()">دریافت</button>
+            </form>
+            <br>
+            <div class="table table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th title="(کالا - شخص - بانک - تنخواه گردان - صندوق)">کد تفصیل</th>
+                        <th>نام تفصیل</th>
+                        <th>گردش بدهکار</th>
+                        <th>گردش بستانکار</th>
+                        <th>تراز حساب</th>
+                        <th><a href="https://hesabfa.com/help/api/TypesTable#balance-type">ماهیت حساب</a></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -150,6 +196,85 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault());
+    async function trialBalanceItemsFunction() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+        const accountPath = document.getElementById('accountPath').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null,
+            'accountPath': accountPath,
+        };
+        const items = await trialBalanceItems(data);
+        if(items.Success) {
+            let i = 0;
+            let rpp = 10;
+
+            let totalCount = items.Result.length;
+            let buttonCount = Math.ceil(totalCount/10);
+
+            createButtons(buttonCount);
+            showData(i, rpp);
+        } else {console.log(items)}
+    }
+
+    async function showData(i, rpp) {
+        const tbody = document.getElementById('tbody');
+
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const project = document.getElementById('project').value;
+        const accountPath = document.getElementById('accountPath').value;
+
+        const data = {
+            'startDate': startDate ? startDate : null,
+            'endDate': endDate ? endDate : null,
+            'project': project ? project : null,
+            'accountPath': accountPath,
+        }
+        tbody.innerHTML = ``;
+        let tr = ``;
+
+        let items = await trialBalanceItems(data);
+        if(items.Result) {
+            for(let j = i ; j < rpp ; j++) {
+                if(items.Result[j]) {
+                    tr = `
+                        <tr>
+                            <td>${items.Result[j].Code}</td>
+                            <td>${items.Result[j].Name}</td>
+                            <td>${items.Result[j].Debit}</td>
+                            <td>${items.Result[j].Credit}</td>
+                            <td>${items.Result[j].Balance}</td>
+                            <td>${items.Result[j].BalanceType}</td>
+                        </tr>
+                        `;
+                    tbody.innerHTML += tr;
+                }
+            }
+        }
+    }
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.innerHTML = ``;
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+        let i = (--index) * 10;
+        let rpp = i + 10;
+        showData(i, rpp)
+    }
 </script>
 </body>
 </html>
