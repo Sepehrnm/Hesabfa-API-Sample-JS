@@ -135,7 +135,7 @@
             <br>
             <form method="post" class="save-contact-form">
                 <div class="align">
-                    <label for="id">ID رسید مدنظر</label>
+                    <label for="id">ID فاکتور مدنظر</label>
                     <input type="text" id="id" name="id" placeholder="...,1,2" />
                 </div>
                 <br>
@@ -203,6 +203,7 @@
             'id': id,
         }
         let invoice = await getInvoiceById(data);
+        invoice = invoice.Result;
         let tr = `
             <tr>
                 <td>${invoice.Id}</td>

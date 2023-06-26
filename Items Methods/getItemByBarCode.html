@@ -173,6 +173,7 @@
             'barcode': barcode
         }
         let item = await getItemByBarcode(data);
+        item = item.Result;
 
         const tableRowTd = document.getElementById('tableRowTd');
         const tableRowTh = document.getElementById('tableRowTh');

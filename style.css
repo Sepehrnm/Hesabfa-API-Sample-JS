@@ -322,12 +322,27 @@ h3 {
 }
 
 #category-name {
-    background: #fff;
+    background: #f4f4f4;
     padding: 1rem;
     margin: 1rem;
     border-radius: 5px;
     text-align: center;
     height: 5vh;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.category-header {
+    background: #f4f4f4;
+}
+
+.balancesheet-category {
+    text-align: center;
 }
 
 .halign {
@@ -412,6 +427,14 @@ h3 {
 
 .category-div {
     font-size: 0.8rem !important;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
 }
 
 @media (max-width: 1024px) {

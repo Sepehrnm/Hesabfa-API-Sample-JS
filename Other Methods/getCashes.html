@@ -167,6 +167,7 @@
     async function getCashesFunction() {
         const tbody = document.getElementById('tbody');
         let cashes = await getCashes();
+        cashes = cashes.Result;
         let tr = ``;
         cashes.map(cash => {
             tr = `

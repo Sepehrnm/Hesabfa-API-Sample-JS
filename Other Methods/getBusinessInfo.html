@@ -172,6 +172,7 @@
     async function getBusinessInfoFunction() {
         const tbody = document.getElementById('tbody');
         let businessInfo = await getBusinessInfo();
+        businessInfo = businessInfo.Result;
         let tr = `
                 <tr>
                     <td>${businessInfo.Name}</td>

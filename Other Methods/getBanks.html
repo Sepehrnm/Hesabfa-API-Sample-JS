@@ -168,6 +168,7 @@
     async function getBanksFunction() {
         const tbody = document.getElementById('tbody');
         let banks = await getBanks();
+        banks = banks.Result;
         let tr = ``;
         banks.map(bank => {
             tr = `

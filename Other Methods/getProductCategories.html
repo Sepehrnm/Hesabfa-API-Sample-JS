@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <link rel="icon" href="../Assets/hesabfaIcon.png">
     <style>
-        .tree-item {
+        span {
             cursor: pointer;
         }
     </style>
@@ -137,7 +137,9 @@
             <h3>
                 دریافت لیست دسته بندی کالاها
             </h3>
-            <div id="tree"></div>
+            <br>
+            <div id="category-name"></div>
+            <div class="category-div"></div>
         </div>
     </div>
 </div>
@@ -155,29 +157,51 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
-</script>
 
-<script type="text/javascript">
     $('button').on('click', (e) => e.preventDefault());
-    var i = 0;
-
     async function getProductCategoriesFunction() {
         let categories = await getProductCategories();
-        showCategory(categories.Result.Root);
+        const tree = $('.category-div');
+        let display;
+
+        display = showCategory(categories.Result.Root);
+        tree.html(display);
+        validateDisplay();
     }
 
-    function showCategory(node) {
-        const tree = document.getElementById('tree');
-        let fullPath = node.FullPath;
-        tree.innerHTML += `<div class="tree-item div-level-${i}">${node.Name}</div>`;
-
-        if(node.Children.length > 0) {
-            node.Children.map(subNode => {
-                showCategory(subNode);
-            })
+    function showCategory(category, offset = 0) {
+        let html = `
+        <div style="padding-right: ${offset}rem;" class="category-content category-content-${offset}">
+          <img class="dropdown-icon dropdown-level-${offset}" src="../assets/left-arrow-circle.svg" />
+          <span value="${category.FullPath}" class="name-level-${offset}">${category.Name}</span>
+          <div>
+      `;
+        if (category.Name) {
+            category.Children.forEach(subCategory => {
+                html += showCategory(subCategory, offset + 1);
+            });
         }
+        html += '</div></div>';
+        return html;
     }
     getProductCategoriesFunction();
+
+
+    //displaying the categories properly
+    function validateDisplay() {
+        let spanValue;
+        let name = $('#category-name');
+
+        $('.category-content').children('div').slideUp();
+        $(".dropdown-icon").on('click', function(e) {
+            e.stopPropagation();
+            $(this).toggleClass("rotate");
+            $(this).next().next().stop().slideToggle();
+
+            spanValue = $(this).parent()[0].children[1].getAttribute("value");
+            name.html(spanValue);
+        });
+    };
 </script>
 </body>
 </html>

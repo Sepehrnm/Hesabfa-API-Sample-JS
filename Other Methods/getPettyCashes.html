@@ -165,6 +165,7 @@
     async function getPettyCashesFunction() {
         const tbody = document.getElementById('tbody');
         let pettyCashes = await getPettyCashes();
+        pettyCashes = pettyCashes.Result;
         let tr = ``;
         pettyCashes.map(pettyCash => {
             tr = `

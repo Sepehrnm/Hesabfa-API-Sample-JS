@@ -168,6 +168,7 @@
     async function getFiscalYearsFunction() {
         const tbody = document.getElementById('tbody');
         let fiscalYears = await getFiscalYears();
+        fiscalYears = fiscalYears.Result;
         let tr = ``;
         fiscalYears.map(fiscalYear => {
             tr = `

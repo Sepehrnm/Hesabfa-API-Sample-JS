@@ -164,6 +164,7 @@
     async function getCurrencyFunction() {
         const tbody = document.getElementById('tbody');
         let currency = await getCurrency();
+        currency = currency.Result;
         let tr = `
             <tr>
                 <td style="text-align: center;">${currency.Currency}</td>

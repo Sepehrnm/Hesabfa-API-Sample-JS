@@ -168,9 +168,9 @@
         let fiscalYear = await getFiscalYear();
         let tr = `
                 <tr>
-                    <td>${fiscalYear.Name}</td>
-                    <td>${fiscalYear.StartDate}</td>
-                    <td>${fiscalYear.EndDate}</td>
+                    <td>${fiscalYear.Result.Name}</td>
+                    <td>${fiscalYear.Result.StartDate}</td>
+                    <td>${fiscalYear.Result.EndDate}</td>
                 </tr>
             `;
             tbody.innerHTML = tr;

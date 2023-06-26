@@ -201,6 +201,7 @@
             Skip: 0,
         }
         let contacts = await getContacts(queryInfo);
+        contacts = contacts.Result;
 
         const totalCount = contacts.List.length;
         const buttonCount = Math.ceil(totalCount/10);
@@ -221,6 +222,7 @@
             Skip: 0,
         }
         let contacts = await getContacts(queryInfo);
+        contacts = contacts.Result;
         tbody.innerHTML = ``;
         let tr = ``;
         if (contacts) {

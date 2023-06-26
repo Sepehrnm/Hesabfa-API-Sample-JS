@@ -171,7 +171,8 @@
 </script>
 <script>
     async function getItemQuantityFunction() {
-        const items = await getItemQuantity();
+        let items = await getItemQuantity();
+        items = items.Result;
         const totalCount = items.length;
         const buttonCount = Math.ceil(totalCount/15);
         createButtons(buttonCount);
@@ -184,7 +185,8 @@
 
     async function showData(i, rpp) {
         const tbody = document.getElementById('tbody');
-        const items = await getItemQuantity();
+        let items = await getItemQuantity();
+        items = items.Result;
         tbody.innerHTML = ``;
         let tr = ``;
         for(let j = i ; j<rpp ; j++) {

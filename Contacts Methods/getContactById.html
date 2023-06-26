@@ -212,6 +212,7 @@
         }
 
         let contacts = await getContactById(data);
+        contacts = contacts.Result;
         console.log(contacts)
         let tr = ``;
 

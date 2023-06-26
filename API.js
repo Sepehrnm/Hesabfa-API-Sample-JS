@@ -30,13 +30,13 @@ async function getContact(data) {
 async function getContactById(data) {
     let method = 'contact/getById';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getContacts(data) {
     let method = 'contact/getcontacts';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function saveContact(data) {
@@ -62,25 +62,25 @@ async function getContactLink(data) {
 async function getItem(data) {
     let method = 'item/get';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getItemByBarcode(data) {
     let method = 'item/getByBarcode';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getItemById(data) {
     let method = 'item/getById';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getItems(data) {
     let method = 'item/getitems';
     let result = await apiRequest(method, data);
-    return (result.Result.List);
+    return (result);
 }
 
 async function saveItem(data) {
@@ -99,7 +99,7 @@ async function getItemQuantity() {
     let method = 'item/GetQuantity';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function updateItemOpeningQuantity(data) {
@@ -113,13 +113,13 @@ async function updateItemOpeningQuantity(data) {
 async function getInvoice(data) {
     let method = 'invoice/get';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getInvoiceById(data) {
     let method = 'invoice/getById';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getInvoices(queryInfo, type) {
@@ -129,7 +129,7 @@ async function getInvoices(queryInfo, type) {
         'type': type
     }
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function saveInvoice(data) {
@@ -219,49 +219,49 @@ async function deleteDocument(data) {
 async function getChanges(data) {
     let method = 'setting/GetChanges';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getFiscalYears() {
     let method = 'setting/GetFiscalYears';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getBanks() {
     let method = 'setting/GetBanks';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getCashes() {
     let method = 'setting/GetCashes';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getPettyCashes() {
     let method = 'setting/GetPettyCashes';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getCurrency() {
     let method = 'setting/GetCurrency';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getWarehouses() {
     let method = 'setting/GetWarehouses';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getProductCategories() {
@@ -271,44 +271,46 @@ async function getProductCategories() {
     return (result);
 }
 
-async function getServiceCategories(data) {
+async function getServiceCategories() {
     let method = 'setting/GetServiceCategories';
+    let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
-async function getContactCategories(data) {
+async function getContactCategories() {
     let method = 'setting/GetContactCategories';
+    let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getFiscalYear() {
     let method = 'setting/GetFiscalYear';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getProjects() {
     let method = 'setting/GetProjects';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getSalesmen() {
     let method = 'setting/GetSalesmen';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getCurrencyTable() {
     let method = 'setting/GetCurrencyTable';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function setCurrencyTable(data) {
@@ -321,14 +323,14 @@ async function getAccounts() {
     let method = 'setting/GetAccounts';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function getBusinessInfo() {
     let method = 'setting/GetBusinessInfo';
     let data = '';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 // Reports Methods
@@ -336,7 +338,7 @@ async function getBusinessInfo() {
 async function balancesheet(data) {
     let method = 'report/balancesheet';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function reportDebtorscreditors(data) {
@@ -354,7 +356,7 @@ async function reportInventory(data) {
 async function profitAndLoss(data) {
     let method = 'report/profitandlossstatement';
     let result = await apiRequest(method, data);
-    return (result.Result);
+    return (result);
 }
 
 async function trialBalance(data) {

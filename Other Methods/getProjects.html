@@ -169,6 +169,7 @@
 <script>
     async function getProjectsFunction() {
         let projects = await getProjects();
+        projects = projects.Result;
 
         const totalCount = projects.length;
         const buttonCount = Math.ceil(totalCount / 10);
@@ -180,6 +181,7 @@
     async function showData(i, rpp) {
         const tbody = document.getElementById('tbody');
         let projects = await getProjects();
+        projects = projects.Result;
         tbody.innerHTML = ``;
 
         let tr = ``;

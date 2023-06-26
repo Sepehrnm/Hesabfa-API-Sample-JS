@@ -135,8 +135,8 @@
             <br>
             <form method="post" class="save-contact-form">
                 <div class="align">
-                    <label class="form-label" for="from">شماره شروع</label>
-                    <input class="form-control" type="text" name="from" id="from" />
+                    <label class="form-label" for="start">شماره شروع</label>
+                    <input class="form-control" type="text" name="from" id="start" />
                 </div>
                 <br>
                 <button id="button" class="btn btn-primary" onclick="getChangesFunction(10)">دریافت</button>
@@ -144,7 +144,7 @@
             <div class="table table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
-                        <th>Id</th>
+                        <th>ID</th>
                         <th>نوع عملیات</th>
                         <th>تاریخ و ساعت تغییر</th>
                         <th>شناسه ماهیت</th>
@@ -187,32 +187,37 @@
     });
 
     async function getChangesFunction(rpp) {
-        let from = document.getElementById('from').value;
-        from = parseInt(from);
-        localStorage.setItem("from", from);
-        showData(rpp);
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = ``;
+
+        let start = document.getElementById('start').value;
+        start = parseInt(start);
+
+        localStorage.setItem("start", start);
+        showData(rpp, start);
     }
 
-    async function showData(rpp) {
+    async function showData(rpp, start) {
         const tbody = document.getElementById('tbody');
         const data = {
-            'start': localStorage.getItem("from")
-        }
+            'start': start
+        };
         let response = await getChanges(data);
+        response = response.Result;
         let tr = ``;
-        for(let j=rpp ; j<rpp+10 ; j++) {
+        for(let j=0 ; j<rpp ; j++) {
             tr = `
-                <tr>
-                    <td>${response[j].Id}</td>
-                    <td>${response[j].Action}</td>
-                    <td>${response[j].DateTime}</td>
-                    <td>${response[j].ObjectId}</td>
-                    <td>${response[j].ObjectType}</td>
-                    <td>${response[j].API}</td>
-                    <td>${response[j].Extra}</td>
-                    <td>${response[j].Extra2}</td>
-                </tr>
-            `;
+            <tr>
+                <td>${response[j].Id}</td>
+                <td>${response[j].Action}</td>
+                <td>${response[j].DateTime}</td>
+                <td>${response[j].ObjectId}</td>
+                <td>${response[j].ObjectType}</td>
+                <td>${response[j].API}</td>
+                <td>${response[j].Extra}</td>
+                <td>${response[j].Extra2}</td>
+            </tr>
+        `;
             tbody.innerHTML += tr;
         }
     }
@@ -221,9 +226,10 @@
     function pageHandler(rpp) {
         const tbody = document.getElementById('tbody');
         tbody.innerHTML = ``;
-        rpp = rpp + 10;
+        let newStart = parseInt(localStorage.getItem("start")) + parseInt(rpp);
+        localStorage.setItem("start", `${newStart}`);
 
-        showData(rpp)
+        showData(10, newStart)
     }
 </script>
 </body>

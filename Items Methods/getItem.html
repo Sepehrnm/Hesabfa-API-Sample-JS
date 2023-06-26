@@ -173,6 +173,7 @@
             'code': code
         }
         let item = await getItem(data);
+        item = item.Result;
         const tableRowTd = document.getElementById('tableRowTd');
         const tableRowTh = document.getElementById('tableRowTh');
 

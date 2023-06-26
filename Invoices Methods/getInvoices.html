@@ -212,6 +212,7 @@
                 Skip: 0
         }
         let invoices = await getInvoices(queryInfo, type);
+        invoices = invoices.Result;
         if(invoices) totalCount = invoices.TotalCount;
 
         const buttonCount = Math.ceil(totalCount/10);
@@ -234,6 +235,7 @@
             Skip: i
         }
         let invoices = await getInvoices(queryInfo, type);
+        invoices = invoices.Result;
 
         tbody.innerHTML = ``;
         let tr = ``;

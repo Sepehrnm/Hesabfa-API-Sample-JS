@@ -146,16 +146,41 @@
                 </div>
                 <button class="btn btn-primary" onclick="balancesheetFunction()">دریافت</button>
             </form>
-            <div class="table table-responsive">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
+            <br><br>
+            <div class="category-div">
+                <div class="balancesheet-category category-content category-content-${offset}">
+                    <div class="category-header category-item name-level-${offset}">
+                        <div class=align>
+                            <div style="width: 200px;">نام حساب</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;"><a href="https://hesabfa.com/help/api/TypesTable#mainaccount-type">نوع حساب اصلی</a></div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;"><a href="https://hesabfa.com/help/api/TypesTable#detail-type">نوع تفصیل</a></div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">گردش بدهکار</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">گردش بستانکار</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">تراز - بدهکار</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">تراز - بستانکار</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">تراز حساب</div>
+                        </div>
+                        <div class="align">
+                            <div style="width: 200px;">تراز کل حساب</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="category-div-footer"></div>
         </div>
     </div>
 </div>
@@ -176,22 +201,92 @@
 </script>
 <script>
     $('button').on('click', (e) => e.preventDefault())
-
     async function balancesheetFunction() {
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const project = document.getElementById('project').value;
-
-        const tbody = document.getElementById('tbody');
-
         const data = {
             'startDate': startDate ? startDate : null,
             'endDate': endDate ? endDate : null,
             'project': project ? project : null
         }
-        let items = await balancesheet(data);
 
-        console.log(items);
+        let categories = await balancesheet(data);
+        let tree = $('.category-div');
+        let footer = $('.category-div-footer');
+        let display;
+
+        display = showCategory(categories.Result.Accounts);
+        let existingContent = tree.html();
+
+        tree.html(existingContent + display);
+        let html = `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>سرجمع دارایی ها</th>
+                        <th>بدهی ها</th>
+                        <th>حقوق صاحبان سهام</th>
+                        <th>سود و زیان</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${categories.Result.Assets}</td>
+                        <td>${categories.Result.Liabilities}</td>
+                        <td>${categories.Result.Equity}</td>
+                        <td>${categories.Result.ProfitOrLoss}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+        footer.html(html);
+    }
+
+    function showCategory(category, offset = 0) {
+        let html = ``;
+        category.forEach(account => {
+            html += `
+            <div class="balancesheet-category category-content category-content-${offset}">
+              <div class="category-header category-item name-level-${offset}">
+                <div class=align>
+                    <div style="width: 200px;">${account.Account.Name}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.Account.MainAccountType}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.Account.DetailType}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.Debit}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.Credit}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.TotalDebit}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.TotalCredit}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.Balance}</div>
+                </div>
+                <div class="align">
+                    <div style="width: 200px;">${account.TotalBalance}</div>
+                </div>
+            </div>
+            <div>
+          `;
+            if (account.Children) {
+                account.Children.forEach(account => {
+                    html += showCategory([account], offset + 1);
+                });
+            }
+            html += '</div></div>';
+        });
+        return html;
     }
 </script>
 </body>

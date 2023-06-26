@@ -164,7 +164,7 @@
 <script>
     async function getCurrencyTableFunction() {
         let currencyTable = await getCurrencyTable();
-        console.log(currencyTable)
+        currencyTable = currencyTable.Result;
         let tbody = document.getElementById('tbody');
         let tr = '';
         currencyTable.map(item => {

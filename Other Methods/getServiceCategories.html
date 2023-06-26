@@ -13,6 +13,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <link rel="icon" href="../Assets/hesabfaIcon.png">
+    <style>
+        span {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -129,8 +134,12 @@
 <div class="row">
     <div class="container">
         <div class="col-12">
-            <h3>دریافت لیست دسته بندی خدمات</h3>
+            <h3>
+                دریافت لیست دسته بندی خدمات
+            </h3>
             <br>
+            <div id="category-name"></div>
+            <div class="category-div"></div>
         </div>
     </div>
 </div>
@@ -148,6 +157,51 @@
 
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
+
+    $('button').on('click', (e) => e.preventDefault());
+    async function getServicesCategoriesFunction() {
+        let categories = await getServiceCategories();
+        const tree = $('.category-div');
+        let display;
+
+        display = showCategory(categories.Result.Root);
+        tree.html(display);
+        validateDisplay();
+    }
+
+    function showCategory(category, offset = 0) {
+        let html = `
+        <div style="padding-right: ${offset}rem;" class="category-content category-content-${offset}">
+          <img class="dropdown-icon dropdown-level-${offset}" src="../assets/left-arrow-circle.svg" />
+          <span value="${category.FullPath}" class="name-level-${offset}">${category.Name}</span>
+          <div>
+      `;
+        if (category.Name) {
+            category.Children.forEach(subCategory => {
+                html += showCategory(subCategory, offset + 1);
+            });
+        }
+        html += '</div></div>';
+        return html;
+    }
+    getServicesCategoriesFunction();
+
+
+    //displaying the categories properly
+    function validateDisplay() {
+        let spanValue;
+        let name = $('#category-name');
+
+        $('.category-content').children('div').slideUp();
+        $(".dropdown-icon").on('click', function(e) {
+            e.stopPropagation();
+            $(this).toggleClass("rotate");
+            $(this).next().next().stop().slideToggle();
+
+            spanValue = $(this).parent()[0].children[1].getAttribute("value");
+            name.html(spanValue);
+        });
+    };
 </script>
 </body>
 </html>

@@ -187,6 +187,7 @@
         const supportOtherCurrencies = document.getElementById("supportOtherCurrencies");
 
         let info = await getBusinessInfo();
+        info = info.Result;
 
         name.innerText = info.Name;
         legalName.innerText = info.LegalName;

@@ -164,6 +164,7 @@
     async function getWarehousesFunction() {
         const tbody = document.getElementById('tbody');
         let warehouses = await getWarehouses();
+        warehouses = warehouses.Result;
         warehouses.map(warehouse => {
             let tr = `
                 <tr>

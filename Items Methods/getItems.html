@@ -192,6 +192,7 @@
         }
 
         let items = await getItems(queryInfo);
+        items = items.Result.List;
 
         const totalCount = items.length;
         const buttonCount = Math.ceil(totalCount/15);
@@ -212,7 +213,8 @@
         Take: rpp,
         Skip: i,
     }
-    const items = await getItems(queryInfo);
+    let items = await getItems(queryInfo);
+    items = items.Result.List;
     tbody.innerHTML = ``;
     let tr = ``;
     if(items) {

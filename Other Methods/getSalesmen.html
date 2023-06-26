@@ -169,6 +169,7 @@
 <script>
     async function getSalesmenFunction() {
         let salesmen = await getSalesmen();
+        salesmen = salesmen.Result;
 
         const totalCount = salesmen.length;
         const buttonCount = Math.ceil(totalCount / 10);
@@ -181,6 +182,7 @@
     async function showData(i, rpp) {
         const tbody = document.getElementById('tbody');
         let salesmen = await getSalesmen();
+        salesmen = salesmen.Result;
         tbody.innerHTML = ``;
 
         let tr = ``;
