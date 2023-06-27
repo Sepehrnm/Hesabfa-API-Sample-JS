@@ -3,8 +3,8 @@ const BASE_URL = 'https://api.hesabfa.com/v1/';
 async function apiRequest(method, data) {
     let url = BASE_URL + method;
     let postData = {
-        apiKey: 'QZAIlbJQnCGENqB1lV0Ygx4rTIfln1yg',
-        loginToken: 'af014d3ed841a5d23bfd378670e2fc7e2e15d42b606f62e6a719be090b501343f45531c55f640319dd131dd9649c3709',
+        apiKey: '#',
+        loginToken: '#',
         ...data
     }
     const response = await fetch(url, {
