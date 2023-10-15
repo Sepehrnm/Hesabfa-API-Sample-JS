@@ -173,7 +173,7 @@
                     <div class="align">
                         <label for="invoiceType" class="form-label">نوع فاکتور</label>
                         <select name="invoiceType" id="invoiceType" class="form-select">
-                            <option>انتخاب کنید</option>
+                            <option value="-1">انتخاب کنید</option>
                             <option value="0">فروش</option>
                             <option value="1">خرید</option>
                             <option value="2">برگشت از فروش</option>
@@ -186,11 +186,9 @@
                     <div class="align">
                         <label for="status" class="form-label">وضعیت فاکتور</label>
                         <select name="status" id="status" class="form-select">
-                            <option>انتخاب کنید</option>
+                            <option value="-1">انتخاب کنید</option>
                             <option value="0">پیش نویس</option>
-                            <option value="1">منتظر تایید</option>
-                            <option value="2">تایید شده</option>
-                            <option value="3">پرداخت شده</option>
+                            <option value="1">تایید شده</option>
                         </select>
                     </div>
                     <div class="align">
@@ -200,7 +198,7 @@
                     <div class="align">
                         <label for="warehouseReceiptStatus" class="form-label">وضعیت رسید/حواله انبار</label>
                         <select class="form-select" id="warehouseReceiptStatus">
-                            <option>انتخاب کنید</option>
+                            <option value="-1">انتخاب کنید</option>
                             <option value="0">رسید یا حواله انبار صادر نشده است</option>
                             <option value="1">رسید یا حواله انبار ناقص است</option>
                             <option value="2">رسید یا حواله انبار کامل است</option>
@@ -227,24 +225,6 @@
                     <div class="align">
                         <label for="currencyRate" class="form-label">نرخ برابری ارز به ارز پایه</label>
                         <input type="text" class="form-control" id="currencyRate">
-                    </div>
-                </div>
-                <div class="halign">
-                    <div class="align">
-                        <label class="form-label" for="title">عنوان اضافات و کسورات</label>
-                        <input class="form-input" type="text" id="title">
-                    </div>
-                    <div class="align">
-                        <label class="form-label" for="amount">مقدار اضافات و کسورات</label>
-                        <input class="form-input" type="text" id="amount">
-                    </div>
-                    <div class="align">
-                        <label class="form-label" for="add">اضافات یا کسورات</label>
-                        <select name="add" id="add" class="form-select">
-                            <option>انتخاب کنید</option>
-                            <option value="true">اضافات</option>
-                            <option value="false">کسورات</option>
-                        </select>
                     </div>
                 </div>
                 <div class="table table-responsive">
@@ -376,9 +356,6 @@
         const discount2 = document.getElementById('discount2').value;
         const tax2 = document.getElementById('tax2').value;
 
-        const title = document.getElementById('title').value;
-        const amount = document.getElementById('amount').value;
-        const add = document.getElementById('add').value;
         const currency = document.getElementById('currency').value;
         const currencyRate = document.getElementById('currencyRate').value;
 
@@ -421,17 +398,10 @@
                     'Tax': tax2
                 }
                 ],
-                'Others' : [
-                {
-                    "Title": title,
-                    "Amount": amount,
-                    "Add": add
-                }
-            ],
                 'Currency': currency,
                 'CurrencyRate': currencyRate
         }
-}
+    }
         let response = await saveInvoice(data);
 
         if(response.Success) {
