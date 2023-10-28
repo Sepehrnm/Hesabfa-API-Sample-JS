@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>حذف رسید</title>
+    <title>دریافت لیست کالا و خدمات</title>
     <link rel="stylesheet" href="../style.css">
     <script src="../API.js" type="text/javascript"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -140,27 +140,39 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h3>حذف رسید</h3>
+            <h3>
+                دریافت لیست کالا یا خدمات
+            </h3>
             <br>
-            <div id="alert-container"></div>
-            <form method="post" class="save-contact-form">
-                <div class="halign">
-                    <div class="align">
-                        <label for="type" class="form-label">نوع رسید</label>
-                        <select name="type" id="type" class="form-select">
-                            <option selected>انتخاب کنید</option>
-                            <option value="1">دریافت</option>
-                            <option value="2">پرداخت</option>
-                        </select>
-                    </div>
-                    <div class="align">
-                        <label for="number" class="form-label">شماره رسید</label>
-                        <input type="text" id="number" class="form-control">
-                    </div>
-                </div>
-                <br>
-                <button class="btn btn-danger" onclick="deleteReceiptFunction()">حذف رسید</button>
-            </form>
+            <div class="table table-responsive">
+                <table id="table" class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Active</th>
+                            <th>Barcode</th>
+                            <th>BuyPrice</th>
+                            <th>Description</th>
+                            <th>ItemType</th>
+                            <th>NodeFamily</th>
+                            <th>NodeId</th>
+                            <th>NodeName</th>
+                            <th>ProductCode</th>
+                            <th>PurchasesTitle</th>
+                            <th>SalesTitle</th>
+                            <th>SellPrice</th>
+                            <th>Stock</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div id="buttons-container"></div>
+            <br>
         </div>
     </div>
 </div>
@@ -179,33 +191,88 @@
     var path = window.location.href.substring(window.location.href.lastIndexOf('API') + 4);
     $('a[href="../' + path + '"]').parent().slideDown();
 </script>
-<script type="text/javascript">
-    $('button').on('click', (e) => e.preventDefault())
-    async function deleteReceiptFunction() {
-        const type = document.getElementById('type').value;
-        const number = document.getElementById('number').value;
 
-        const data = {
-            'type': type,
-            'number': number
-        };
-        const response = await deleteReceipt(data);
-        if(response.Success) {
-            $('#alert-container').html(`
-                <div class="alert alert-success" role="alert">
-                حذف گردید
-                </div>
-            `)
-        } else {
-            $('#alert-container').html(`
-                <div class="alert alert-danger" role="alert" style="direction: ltr;">
-                    ErrorCode: ${response.ErrorCode}
-                    <br>
-                    ErrorMessage: ${response.ErrorMessage}
-                </div>
-            `)
+
+<script>
+    async function getItemsFunction() {
+        let queryInfo = {
+            SortBy: 'Code',
+            SortDesc: true,
+            Take: 15,
+            Skip: 0,
+        }
+
+        let items = await getItems(queryInfo);
+        items = items.Result.List;
+
+        const totalCount = items.length;
+        const buttonCount = Math.ceil(totalCount/15);
+        createButtons(buttonCount);
+        let i=0;
+        let rpp=15;
+        showData(i, rpp);
+    }
+
+    getItemsFunction();
+
+    async function showData(i, rpp) {
+    const tbody = document.getElementById('tbody');
+
+    let queryInfo = {
+        SortBy: 'Code',
+        SortDesc: true,
+        Take: rpp,
+        Skip: i,
+    }
+    let items = await getItems(queryInfo);
+    items = items.Result.List;
+    tbody.innerHTML = ``;
+    let tr = ``;
+    if(items) {
+        for (let j = i; j < rpp; j++) {
+            tr = `
+                <tr>
+                    <td>${items[j].Id}</td>
+                    <td>${items[j].Code}</td>
+                    <td>${items[j].Name}</td>
+                    <td>${items[j].Active}</td>
+                    <td>${items[j].Barcode}</td>
+                    <td>${items[j].BuyPrice}</td>
+                    <td>${items[j].Description}</td>
+                    <td>${items[j].ItemType}</td>
+                    <td>${items[j].NodeFamily}</td>
+                    <td>${items[j].NodeId}</td>
+                    <td>${items[j].NodeName}</td>
+                    <td>${items[j].ProductCode}</td>
+                    <td>${items[j].PurchasesTitle}</td>
+                    <td>${items[j].SalesTitle}</td>
+                    <td>${items[j].SellPrice}</td>
+                    <td>${items[j].Stock}</td>
+                    <td>${items[j].Unit}</td>
+                </tr>
+                `;
+            i++;
+
+            tbody.innerHTML += (tr);
         }
     }
+}
+
+    function createButtons(buttonCount) {
+        const buttonsContainer = document.getElementById('buttons-container');
+        for(let z=1 ; z<=buttonCount ; z++) {
+            var button = `<button class="btn btn-primary" onclick="pageHandler(${z})">${z}</button>`;
+            buttonsContainer.innerHTML += button;
+        }
+    }
+
+    function pageHandler(index) {
+    let i = (--index) * 15;
+    let rpp = i + 15;
+    showData(i, rpp)
+    }
+
+
 </script>
 </body>
 </html>

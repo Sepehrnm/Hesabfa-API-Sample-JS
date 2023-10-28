@@ -1,3 +1,6 @@
+@import './Assets/dx/dx.light.css';
+@import './Assets/dx/dx.light.compact.css';
+
 @font-face {
     font-family: iranSans;
     src: url(./assets/iranSans.ttf);
@@ -12,6 +15,8 @@
 
 body {
     direction: rtl;
+    background: #f2f2f2;
+    overflow: auto !important;
 }
 
 #table {
@@ -27,7 +32,7 @@ html {
     scroll-behavior: smooth;
 }
 
-.container {
+.row {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,15 +131,6 @@ html {
 
 .delete-icon:hover {
     opacity: 0.5;
-}
-
-body {
-    background: #f2f2f2;
-    overflow: auto !important;
-}
-
-.container {
-    margin-top: 3rem !important;
 }
 
 .heading {

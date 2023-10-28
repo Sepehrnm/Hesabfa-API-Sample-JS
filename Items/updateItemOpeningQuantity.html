@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>حذف رسید</title>
+    <title>بروزرسانی موجودی اول دوره کالاها</title>
     <link rel="stylesheet" href="../style.css">
     <script src="../API.js" type="text/javascript"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -137,29 +137,62 @@
         </li>
     </ul>
 </nav>
+<script>
+    var i = 2;
+</script>
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h3>حذف رسید</h3>
+            <h3>
+                به روز رسانی موجودی اول دوره کالاها
+            </h3>
             <br>
             <div id="alert-container"></div>
             <form method="post" class="save-contact-form">
-                <div class="halign">
-                    <div class="align">
-                        <label for="type" class="form-label">نوع رسید</label>
-                        <select name="type" id="type" class="form-select">
-                            <option selected>انتخاب کنید</option>
-                            <option value="1">دریافت</option>
-                            <option value="2">پرداخت</option>
-                        </select>
-                    </div>
-                    <div class="align">
-                        <label for="number" class="form-label">شماره رسید</label>
-                        <input type="text" id="number" class="form-control">
-                    </div>
-                </div>
-                <br>
-                <button class="btn btn-danger" onclick="deleteReceiptFunction()">حذف رسید</button>
+                <table class="table-striped table table-light">
+                    <thead>
+                        <tr>
+                            <th>
+                                کد کالا
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                تعداد
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                مبلغ واحد
+                                <span style="color: red;font-size: 1.2rem;">*</span>
+                            </th>
+                            <th>
+                                کد انبار
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="quantity-tbody">
+                        <tr>
+                            <td>
+                                <input type="hidden" value="1" name="counter" id="counter">
+                                <input class="accounting-input" type="text" id="code1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="quantity1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="unitPrice1" required />
+                            </td>
+                            <td>
+                                <input type="text" id="warehouseCode1" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <div id="buttons-container" style="justify-content: flex-end;">
+                <button id="deleteRow" class="deleteRow btn btn-danger m-2"><span class="m-2">-</span>حذف ردیف</button>
+                <button id="addNewRow" class="addNewRow btn btn-secondary m-2"><span class="m-2">+</span>افزودن ردیف</button>
+            </div>
+
+                <button onclick="updateQuantityFunction()" class="btn btn-primary">بروزرسانی</button>
             </form>
         </div>
     </div>
@@ -180,20 +213,67 @@
     $('a[href="../' + path + '"]').parent().slideDown();
 </script>
 <script type="text/javascript">
-    $('button').on('click', (e) => e.preventDefault())
-    async function deleteReceiptFunction() {
-        const type = document.getElementById('type').value;
-        const number = document.getElementById('number').value;
+    $(document).ready(() => {
+        $("#addNewRow").on('click', (e) => {
+            e.preventDefault();
+            let element = `
+                <tr id="element-${i}">
+                    <input type="hidden" value="${i}" id="counter">
+                    <td><input type="text" id="code${i}" class="accounting-input" required /></td>
+                    <td><input type="text" id="quantity${i}" required /></td>
+                    <td><input type="text" id="unitPrice${i}" required /></td>
+                    <td><input type="text" id="warehouseCode${i}" /></td>
+                </tr>`;
+            ++i;
+            $(".quantity-tbody").append(element);
+        });
 
-        const data = {
-            'type': type,
-            'number': number
+        $("#deleteRow").on('click', (e) => {
+            e.preventDefault();
+            if(i>2) {
+                $(`.quantity-tbody`).children().last().remove();
+                i--;
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function updateQuantityFunction() {
+        // let counter = $('#counter').val();
+        let counter = i;
+        let data = [];
+        let item = {};
+        let items = [];
+        let code;
+        let quantity;
+        let unitPrice;
+        let warehouseCode;
+
+        for(let j = 1 ; j <= counter ; j++) {
+            code = $(`#code${j}`).val();
+            quantity = $(`#quantity${j}`).val();
+            unitPrice = $(`#unitPrice${j}`).val();
+            warehouseCode = $(`#warehouseCode${j}`).val();
+
+            item = {
+                'code': code,
+                'quantity': quantity,
+                'unitPrice': unitPrice,
+                'warehouseCode': warehouseCode
+            }
+            items.push(item);
+        }
+
+        data = {
+            'items': items
         };
-        const response = await deleteReceipt(data);
+
+        const response = await updateItemOpeningQuantity(data);
         if(response.Success) {
             $('#alert-container').html(`
                 <div class="alert alert-success" role="alert">
-                حذف گردید
+                  ذخیره گردید
                 </div>
             `)
         } else {

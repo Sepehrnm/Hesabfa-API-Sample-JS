@@ -19,7 +19,39 @@ async function apiRequest(method, data) {
     return jsonData;
 }
 
-//Contacts Methods
+//Warehouse
+
+async function getWarehouseReceipts(data) {
+    let method = 'warehouse/getReceipts';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
+async function getWarehouseReceipt(data) {
+    let method = 'warehouse/get';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
+async function getWarehouseReceiptById(data) {
+    let method = 'warehouse/getById';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
+async function warehouseSaveWarehouseReceipt(data) {
+    let method = 'warehouse/save';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
+async function deleteWarehouseReceipt(data) {
+    let method = 'warehouse/delete';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
+//Contacts
 
 async function getContact(data) {
     let method = 'contact/get';
@@ -57,7 +89,7 @@ async function getContactLink(data) {
     return (result);
 }
 
-//Items Methods
+//Items
 
 async function getItem(data) {
     let method = 'item/get';
@@ -108,7 +140,7 @@ async function updateItemOpeningQuantity(data) {
     return (result);
 }
 
-// Invoices Methods
+// Invoices
 
 async function getInvoice(data) {
     let method = 'invoice/get';
@@ -188,7 +220,7 @@ async function deleteReceipt(data) {
     return (result);
 }
 
-// Accounting Methods
+// Accounting
 
 async function getDocument(data) {
     let method = 'document/get';
@@ -214,7 +246,7 @@ async function deleteDocument(data) {
     return (result);
 }
 
-// Other Methods
+// Settings
 
 async function getChanges(data) {
     let method = 'setting/GetChanges';
@@ -333,7 +365,7 @@ async function getBusinessInfo() {
     return (result);
 }
 
-// Reports Methods
+// Reports
 
 async function balancesheet(data) {
     let method = 'report/balancesheet';
