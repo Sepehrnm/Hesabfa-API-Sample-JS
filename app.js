@@ -170,3 +170,57 @@ function initializeReceiptsByIDListPage(data) {
         ],
     });
 }
+
+function initializeDiscountItemPage(data) {
+    $('#gridContainer').dxDataGrid({
+        dataSource: data,
+        keyExpr: 'Id',
+        rtlEnabled: true,
+        responsive: true,
+        columnHidingEnabled: true,
+        filterRow: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10,
+        },
+        focusedRowEnabled: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        showBorders: true,
+        headerFilter: {
+            visible: true,
+        },
+        groupPanel: {
+            visible: true,
+        },
+    });
+}
+
+function initializeReportItemPage(data) {
+    $('#gridContainer').dxDataGrid({
+        dataSource: data,
+        keyExpr: 'DocumentNumber',
+        rtlEnabled: true,
+        responsive: true,
+        columnHidingEnabled: true,
+        filterRow: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10,
+        },
+        focusedRowEnabled: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        showBorders: true,
+        headerFilter: {
+            visible: true,
+        },
+        groupPanel: {
+            visible: true,
+        },
+    });
+}

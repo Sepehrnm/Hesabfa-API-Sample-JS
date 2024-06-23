@@ -202,6 +202,12 @@ async function getReceipt(data) {
     return (result);
 }
 
+async function getReceiptByID(data) {
+    let method = 'receipt/GetById';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
 async function getReceipts(data) {
     let method = 'receipt/getReceipts';
     let result = await apiRequest(method, data);
@@ -401,4 +407,49 @@ async function trialBalanceItems(data) {
     let method = 'report/trialbalanceitems';
     let result = await apiRequest(method, data);
     return (result);
+}
+
+async function getDiscountItem(data) {
+    let method = 'discountitem/get';
+    return await apiRequest(method, data);
+}
+
+async function getDiscountItemByID(data) {
+    let method = 'discountitem/getById';
+    return await apiRequest(method, data);
+}
+
+async function getDiscountItems(data) {
+    let method = 'discountitem/getItems';
+    return await apiRequest(method, data);
+}
+
+async function saveDiscountItem(data) {
+    let method = 'discountitem/save';
+    return await apiRequest(method, data);
+}
+
+async function deleteDiscountItem(data) {
+    let method = 'discountitem/delete';
+    return await apiRequest(method, data);
+}
+
+async function reportBank(data) {
+    let method = 'report/bank';
+    return await apiRequest(method, data);
+}
+
+async function reportCash(data) {
+    let method = 'report/cash';
+    return await apiRequest(method, data);
+}
+
+async function reportPettyCash(data) {
+    let method = 'report/pettyCash';
+    return await apiRequest(method, data);
+}
+
+async function reportJournal(data) {
+    let method = 'report/journal';
+    return await apiRequest(method, data);
 }
