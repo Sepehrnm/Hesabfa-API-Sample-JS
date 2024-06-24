@@ -181,6 +181,11 @@
                             <option value="6">مسیر دسته بندی شخص</option>
                         </select>
                     </div>
+
+                    <div class="align">
+                        <label for="code">کد</label>
+                        <input type="text" id="code" name="code" />
+                    </div>
                 </div>
 
                 <div class="halign">
@@ -222,17 +227,28 @@
 <script type="text/javascript">
     $('button').on('click', (e) => e.preventDefault())
     async function saveDiscountItemFunction() {
+        let type = $("#type").val();
+
         const data = {
             "item": {
                 "Id": $("#id").val(),
                 "title": $("#title").val(),
-                "type": $("#type").val(),
+                "type": type,
                 "percent": $("#percent").val(),
                 "amount": $("#amount").val(),
                 "validFrom": $("#validFrom").val(),
                 "validTo": $("#validTo").val(),
                 "tag": $("#tag").val()
             }
+        }
+
+        switch(type) {
+            case "3": {
+                data.item.productCode = $("#code").val();
+            }break;
+            case "4": {
+                data.item.contactCode = $("#code").val();
+            }break;
         }
 
         const response = await saveDiscountItem(data);
