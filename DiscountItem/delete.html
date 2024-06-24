@@ -186,7 +186,7 @@
 
         let response = await deleteDiscountItem(data);
         if(response.Success) alert("آیتم حذف شد");
-        else alert(`Error Occured: ErrorCode: ${items.ErrorCode} - ErrorMessage: ${items.ErrorMessage}`);
+        else alert(`Error Occured: ErrorCode: ${response.ErrorCode} - ErrorMessage: ${response.ErrorMessage}`);
     }
 </script>
 <script type='text/javascript'>
