@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>تطابق شماره کارت و کد ملی</title>
+    <script src="../jQuery.js"></script>
+    <style>
+        tr {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="includedContent"></div>
+<script src="../linksPartial.js"></script>
+<script src="../API.js" type="text/javascript"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3> تطابق شماره کارت و کد ملی</h3>
+            <form class="save-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="nationalCode" class="form-label">کد ملی</label>
+                        <input type="text" class="form-control" id="nationalCode">
+                    </div>
+
+                    <div class="align">
+                        <label for="cardNumber" class="form-label">شماره کارت</label>
+                        <input type="text" class="form-control" id="cardNumber">
+                    </div>
+                    <div class="align">
+                        <label for="birthDate" class="form-label">تاریخ تولد</label>
+                        <input type="text" class="form-control" id="birthDate">
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-primary" onclick="checkCardAndNationalCodeFunction()">استعلام</button>
+                </div>
+            </form>
+            <div class="table-responsive mt-4">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <th>مطابقت</th>
+                    </tr>
+                    <tr>
+                        <td id="matched"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function checkCardAndNationalCodeFunction() {
+        const data = {
+            nationalCode: $("#nationalCode").val(),
+            cardNumber: $("#cardNumber").val(),
+            birthDate: $("#birthDate").val()
+        };
+        let result = await checkCardAndNationalCode(data);
+        if(result.Success) {
+            $("#matched").text(result.Result.Data.Matched);
+        } else {
+            alert(`Error Occured. ErrorCode: ${result.ErrorCode} - ErrorMessage: ${result.ErrorMessage}`)
+        }
+    }
+</script>
+</body>
+</html>

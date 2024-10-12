@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ذخیره انتقال بین بانکی</title>
+    <script src="../jQuery.js"></script>
+    <style>
+        label {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+<div id="includedContent"></div>
+<script src="../linksPartial.js"></script>
+<script src="../API.js" type="text/javascript"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>
+                ذخیره انتقال بین بانکی
+            </h3>
+            <form id="bankTransferForm" class="save-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="number" class="form-label">شماره رسید</label>
+                        <input type="text" class="form-control" id="number">
+                    </div>
+                    <div class="align">
+                        <label for="description" class="form-label">شرح رسید</label>
+                        <input type="text" class="form-control" id="description">
+                    </div>
+                    <div class="align">
+                        <label for="date" class="form-label">تاریخ انتقال</label>
+                        <input type="text" class="form-control" id="date">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="fromAmount" class="form-label">مبلغ مبدا</label>
+                        <input type="number" class="form-control" id="fromAmount">
+                    </div>
+                    <div class="align">
+                        <label for="fromReference" class="form-label">شماره ارجاع مبدا</label>
+                        <input type="text" class="form-control" id="fromReference">
+                    </div>
+                    <div class="align">
+                        <label for="fromBank" class="form-label">کد بانک مبدا</label>
+                        <input type="text" class="form-control" id="fromBank">
+                    </div>
+                    <div class="align">
+                        <label for="fromCash" class="form-label">کد صندوق مبدا</label>
+                        <input type="text" class="form-control" id="fromCash">
+                    </div>
+                    <div class="align">
+                        <label for="fromPettyCash" class="form-label">کد تنخواه گردان مبدا</label>
+                        <input type="text" class="form-control" id="fromPettyCash">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="fromTransactionFee" class="form-label">کارمزد خدمات بانکی مبدا</label>
+                        <input type="number" class="form-control" id="fromTransactionFee">
+                    </div>
+                    <div class="align">
+                        <label for="fromCurrencyRate" class="form-label">نرخ برابری ارز مبدا با ارز اصلی سیستم</label>
+                        <input type="number" class="form-control" id="fromCurrencyRate">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="toAmount" class="form-label">مبلغ مقصد</label>
+                        <input type="number" class="form-control" id="toAmount">
+                    </div>
+                    <div class="align">
+                        <label for="toReference" class="form-label">شماره ارجاع مقصد</label>
+                        <input type="text" class="form-control" id="toReference">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="toBank" class="form-label">کد بانک مقصد</label>
+                        <input type="text" class="form-control" id="toBank">
+                    </div>
+                    <div class="align">
+                        <label for="toCash" class="form-label">کد صندوق مقصد</label>
+                        <input type="text" class="form-control" id="toCash">
+                    </div>
+                    <div class="align">
+                        <label for="toPettyCash" class="form-label">کد تنخواه گردان مقصد</label>
+                        <input type="text" class="form-control" id="toPettyCash">
+                    </div>
+                </div>
+                <div class="halign">
+                    <div class="align">
+                        <label for="toTransactionFee" class="form-label">کارمزد خدمات بانکی مقصد</label>
+                        <input type="text" class="form-control" id="toTransactionFee">
+                    </div>
+                    <div class="align">
+                        <label for="toCurrencyRate" class="form-label">نرخ برابری ارز مقصد با ارز اصلی سیستم</label>
+                        <input type="text" class="form-control" id="toCurrencyRate">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center mt-4">
+                    <button type="button" class="btn btn-primary" onclick="saveBankTransferFunction()">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    async function saveBankTransferFunction() {
+        const data = {
+            transfer: {
+                number: $('#number').val(),
+                description: $('#description').val(),
+                date: $('#date').val(),
+                fromAmount: $('#fromAmount').val(),
+                fromReference: $('#fromReference').val(),
+                fromBank: $('#fromBank').val(),
+                fromCash: $('#fromCash').val(),
+                fromPettyCash: $('#fromPettyCash').val(),
+                fromTransactionFee: $('#fromTransactionFee').val(),
+                fromCurrencyRate: $('#fromCurrencyRate').val(),
+                toAmount: $('#toAmount').val(),
+                toReference: $('#toReference').val(),
+                toBank: $('#toBank').val(),
+                toCash: $('#toCash').val(),
+                toPettyCash: $('#toPettyCash').val(),
+                toTransactionFee: $('#toTransactionFee').val(),
+                toCurrencyRate: $('#toCurrencyRate').val()
+            }
+        }
+        const response = await saveBankTransfer(data);
+        if(response.Success) alert("آیتم ذخیره شد");
+        else alert(`Error Occured. ErrorCode: ${response.ErrorCode} - ErrorMessage: ${response.ErrorMessage}`);
+    }
+</script>
+</body>
+</html>

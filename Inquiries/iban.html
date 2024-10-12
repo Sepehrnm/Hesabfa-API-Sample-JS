@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>استعلام شماره شبا</title>
+    <script src="../jQuery.js"></script>
+    <style>
+        tr {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="includedContent"></div>
+<script src="../linksPartial.js"></script>
+<script src="../API.js" type="text/javascript"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>استعلام شماره شبا</h3>
+            <form class="save-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="iban" class="form-label">شماره شبا</label>
+                        <input type="text" class="form-control" id="iban">
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-primary" onclick="ibanFunction()">استعلام</button>
+                </div>
+            </form>
+            <div class="table-responsive mt-4">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <th>نام و نام خانوادگی</th>
+                        <th>نام بانک</th>
+                        <th>قابلیت انتقال وجه</th>
+                    </tr>
+                    <tr>
+                        <td id="name"></td>
+                        <td id="bank-name"></td>
+                        <td id="is-transferable"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('button').on('click', (e) => e.preventDefault())
+    async function ibanFunction() {
+        const data = {
+            iban: $("#iban").val()
+        };
+        let result = await iban(data);
+        if(result.Success) {
+            $("#name").text(result.Result.Data.Name);
+            $("#bank-name").text(result.Result.Data.BankName);
+            $("#is-transferable").text(result.Result.Data.IsTransferable);
+        } else {
+            alert(`Error Occured. ErrorCode: ${result.ErrorCode} - ErrorMessage: ${result.ErrorMessage}`)
+        }
+    }
+</script>
+</body>
+</html>

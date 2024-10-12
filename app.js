@@ -198,6 +198,61 @@ function initializeDiscountItemPage(data) {
     });
 }
 
+function initializeBankTransferPage(data, key = 'Id') {
+    if(key === 'Number') data = [data]
+    $('#gridContainer').dxDataGrid({
+        dataSource: data,
+        keyExpr: key,
+        rtlEnabled: true,
+        responsive: true,
+        columnHidingEnabled: true,
+        filterRow: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10,
+        },
+        focusedRowEnabled: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        showBorders: true,
+        headerFilter: {
+            visible: true,
+        },
+        groupPanel: {
+            visible: true,
+        },
+    });
+}
+
+function initializeGetQuantityPage(data) {
+    $('#gridContainer').dxDataGrid({
+        dataSource: data,
+        keyExpr: 'Code',
+        rtlEnabled: true,
+        responsive: true,
+        columnHidingEnabled: true,
+        filterRow: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10,
+        },
+        focusedRowEnabled: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        showBorders: true,
+        headerFilter: {
+            visible: true,
+        },
+        groupPanel: {
+            visible: true,
+        },
+    });
+}
+
 function initializeReportItemPage(data) {
     $('#gridContainer').dxDataGrid({
         dataSource: data,

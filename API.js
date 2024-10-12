@@ -134,6 +134,12 @@ async function getItemQuantity() {
     return (result);
 }
 
+async function getItemQuantity2(data = {}) {
+    let method = 'item/GetQuantity2';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
 async function updateItemOpeningQuantity(data) {
     let method = 'item/UpdateOpeningQuantity';
     let result = await apiRequest(method, data);
@@ -220,6 +226,12 @@ async function saveReceipt(data) {
     return (result);
 }
 
+async function saveReceipt2(data) {
+    let method = 'receipt/save2';
+    let result = await apiRequest(method, data);
+    return (result);
+}
+
 async function deleteReceipt(data) {
     let method = 'receipt/delete';
     let result = await apiRequest(method, data);
@@ -265,6 +277,12 @@ async function getFiscalYears() {
     let data = '';
     let result = await apiRequest(method, data);
     return (result);
+}
+
+async function getDefaultPriceList(){
+    let method = 'setting/getDefaultPriceList';
+    let data = '';
+    return await apiRequest(method, data);
 }
 
 async function getBanks() {
@@ -452,4 +470,77 @@ async function reportPettyCash(data) {
 async function reportJournal(data) {
     let method = 'report/journal';
     return await apiRequest(method, data);
+}
+
+// bank transfer
+async function getBankTransferList(data) {
+    let method = 'banktransfer/getTransfers';
+    return await apiRequest(method, data);
+}
+
+async function getBankTransfer(data) {
+    let method = 'banktransfer/get';
+    return await apiRequest(method, data);
+}
+
+async function saveBankTransfer(data) {
+    let method = 'banktransfer/save';
+    return await apiRequest(method, data);
+}
+
+async function deleteBankTransfer(data) {
+    let method = 'banktransfer/delete';
+    return await apiRequest(method, data);
+}
+
+//Inquiries
+
+async function credit(data) {
+    let method = 'inquiry/credit';
+    return await apiRequest(method, data)
+}
+
+async function getNationalIdentity(data) {
+    let method = 'inquiry/nationalIdentity';
+    return await apiRequest(method, data)
+}
+
+async function checkMobileAndNationalCode(data) {
+    let method = 'inquiry/checkMobileAndNationalCode';
+    return await apiRequest(method, data)
+}
+
+async function checkCardAndNationalCode(data) {
+    let method = 'inquiry/checkCardAndNationalCode';
+    return await apiRequest(method, data)
+}
+
+async function checkIbanAndNationalCode(data) {
+    let method = 'inquiry/checkIbanAndNationalCode';
+    return await apiRequest(method, data)
+}
+
+async function iban(data) {
+    let method = 'inquiry/iban';
+    return await apiRequest(method, data)
+}
+
+async function card(data) {
+    let method = 'inquiry/card';
+    return await apiRequest(method, data)
+}
+
+async function cardToIban(data) {
+    let method = 'inquiry/cardToIban';
+    return await apiRequest(method, data)
+}
+
+async function accountToIBAN(data) {
+    let method = 'inquiry/accountToIBAN';
+    return await apiRequest(method, data)
+}
+
+async function postalCode(data) {
+    let method = 'inquiry/postalCode';
+    return await apiRequest(method, data)
 }

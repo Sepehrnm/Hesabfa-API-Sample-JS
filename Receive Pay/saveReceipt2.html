@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ذخیره رسید پیشرفته</title>
+    <script src="../jQuery.js"></script>
+</head>
+<body>
+<div id="includedContent"></div>
+<script src="../linksPartial.js"></script>
+<script src="../API.js" type="text/javascript"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger mt-2 mb-2">
+                توجه:
+                با فراخوانی این متد می توانید علاوه بر ثبت پیشرفته رسیدهای دریافت و پرداخت، رسیدهای درآمد و هزینه را نیز ذخیره کنید.
+                <br>
+                <br>
+                توجه:
+                در صورتی که رسید شامل چک باشد و وضعیت چک عادی نباشد (مثلا در جریان وصول یا خرج شده باشد) این رسید را توسط API نمی توان ویرایش کرد.
+                <br>
+                <br>
+                توجه:
+                برای ثبت رسید دریافت و پرداخت فقط ارسال کد شخص کافی است. برای ثبت رسید درآمد و هزینه مسیر حساب به صورت کامل باید ثبت شود. در صورتی که حساب تفصیل شخص داشته باشد، کد شخص نیز ضروری است.
+                <br>
+                <br>
+                توجه:
+                فقط یکی از شش فیلد bankCode، cashCode ، check ، accountPath ، contactCode و pettyCashCode, spendCheck باید مقدار داشته باشد. در صورت ذکر نشدن currency و currencyRate از واحد پول بانک، صندوق یا تنخواه گردان و نرخ برابری ارز پیش فرض سیستم استفاده خواهد شد.
+                فیلد spendCheck فقط در رسید پرداخت قابل استفاده است. برای ثبت خرج چک باید شماره، تاریخ و مبلغ چک دریافتی ذکر شود. در صورتی که وضعیت چک دریافتی عادی نباشد، قابل خرج کردن نیست.
+                <br>
+                <br>
+                توجه:
+                فیلد spendCheck فقط در رسید پرداخت قابل استفاده است. برای ثبت خرج چک باید شماره، تاریخ و مبلغ چک دریافتی ذکر شود. در صورتی که وضعیت چک دریافتی عادی نباشد، قابل خرج کردن نیست.
+                accountPath مسیر حساب
+
+                مثال: "دارایی ها: دارایی های جاری: موجودی نقد و بانک: وجوه در راه"
+                اگر حساب تفصیلی نظیر شخص یا بانک داشته باشد، باید کد تفصیل مرتبط هم ارسال شود. مثلا اگر تفصیل حساب شخص باشید باید فیلد contactCode نیز ارسال گردد.
+
+            </div>
+            <form id="transferForm" class="save-form">
+                <div class="halign">
+                    <div class="align">
+                        <label for="type">نوع رسید</label>
+                        <select name="type" id="type" class="form-select">
+                            <option value="0">انتخاب کنید</option>
+                            <option value="1">رسید دریافت</option>
+                            <option value="2">رسید پرداخت</option>
+                            <option value="3">رسید درآمد</option>
+                            <option value="4">رسید هزینه</option>
+                            <option value="5">رسید دریافت سایر</option>
+                            <option value="6">رسید پرداخت سایر</option>
+                        </select>
+                    </div>
+                    <div class="align">
+                        <label for="number" class="form-label">شماره رسید</label>
+                        <input type="text" id="number" class="form-control">
+                    </div>
+                </div>
+
+                <div class="halign">
+                    <div class="align">
+                        <label for="dateTime" class="form-label">تاریخ</label>
+                        <input type="text" id="dateTime" class="form-control">
+                    </div>
+                    <div class="align">
+                        <label for="project" class="form-label">نام پروژه</label>
+                        <input type="text" id="project" class="form-control">
+                    </div>
+                </div>
+
+                <br />
+                <h4 class="p-4">آیتم های رسید</h4>
+                <br />
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>مسیر حساب</th>
+                                <th>کد شخص</th>
+                                <th>مبلغ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input id="item-account" type="text" class="form-control"></td>
+                                <td><input id="item-contactCode" type="text" class="form-control"></td>
+                                <td><input id="item-amount" type="text" class="form-control"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <br />
+                <h4 class="p-4">تراکنش ها</h4>
+                <br />
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <tr style="text-align: center;">
+                            <th colspan="9">تراکنش</th>
+                        </tr>
+                        <tr style="text-align: center;">
+                            <th>مبلغ</th>
+                            <th>کارمزد خدمات بانکی</th>
+                            <th>کد بانک</th>
+                            <th>کد شخص</th>
+                            <th colspan="4">مسیر حساب</th>
+                        </tr>
+
+                        <tr>
+                            <td><input id="transaction-amount" type="text" class="form-control"></td>
+                            <td><input id="transaction-transactionFee" type="text" class="form-control"></td>
+                            <td><input id="transaction-bankCode" type="text" class="form-control"></td>
+                            <td><input id="transaction-contactCode" type="text" class="form-control"></td>
+                            <td colspan="4"><input id="transaction-account" type="text" class="form-control"></td>
+                        </tr>
+
+                        <tr style="text-align: center;">
+                            <th colspan="9">چک</th>
+                        </tr>
+                        <tr style="text-align: center;">
+                            <th>شماره چک</th>
+                            <th>تاریخ چک</th>
+                            <th>شماره صیاد</th>
+                            <th>مبلغ چک</th>
+                            <th>در وجه</th>
+                            <th>کد بانکی که چک از آن صادر شده</th>
+                            <th>دریافت کننده چک</th>
+                            <th>نام بانک صادر کننده چک</th>
+                        </tr>
+
+                        <tr>
+                            <td><input id="check-number" type="text" class="form-control"></td>
+                            <td><input id="check-date" type="text" class="form-control"></td>
+                            <td><input id="check-sayyad" type="text" class="form-control"></td>
+                            <td><input id="check-amount" type="text" class="form-control"></td>
+                            <td><input id="check-payee" type="text" class="form-control"></td>
+                            <td><input id="check-bankCode" type="text" class="form-control"></td>
+                            <td><input id="check-payerCode" type="text" class="form-control"></td>
+                            <td><input id="check-bankName" type="text" class="form-control"></td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center m-4">
+                    <button type="button" class="btn btn-primary" onclick="saveReceiptFunction2()">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+async function saveReceiptFunction2() {
+        const data = {
+            type: $('#type').val(),
+            Number: $('#number').val(),
+            description: $('#description').val(),
+            currency: $('#currency').val(),
+            currencyRate: $('#currencyRate').val(),
+            dateTime: $('#dateTime').val(),
+            project: $('#project').val(),
+            items: [
+                {
+                    account: $('#item-account').val(),
+                    contactCode: $('#item-contactCode').val(),
+                    amount: $('#item-amount').val(),
+                }
+            ],
+            transactions: [
+                {
+                    amount: $('#transaction-amount').val(),
+                    reference: $('#transaction-reference').val(),
+                    transactionFee: $('#transaction-transactionFee').val(),
+                    bankCode: $('#transaction-bankCode').val(),
+                    contactCode: $('#transaction-contactCode').val(),
+                    account: $('#transaction-account').val(),
+                    check: {
+                        number: $('#check-number').val(),
+                        date: $('#check-date').val(),
+                        amount: $('#check-amount').val(),
+                        sayyad: $('#check-sayyad').val(),
+                        payee: $('#check-payee').val(),
+                        bankCode: $('#check-bankCode').val(),
+                        payerCode: $('#check-payerCode').val(),
+                        bankName: $('#check-bankName').val(),
+                    }
+                }
+            ]
+        };
+        console.log(data)
+        const response = await saveReceipt2(data);
+
+        if(response.Success)
+            alert("ذخیره گردید");
+        else
+            alert(`Error Occured. ErrorCode: ${response.ErrorCode} - ErrorMessage: ${response.ErrorMessage}`);
+    }
+</script>
+</body>
+</html>
